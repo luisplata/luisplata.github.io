@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Código QR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    #qrcode {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Generador de Código QR</h1>
+  <p>Escribe un enlace y genera el código QR:</p>
+
+  <input type="text" id="linkInput" placeholder="https://example.com" size="40">
+  <button onclick="generateQRCode()">Generar QR</button>
+
+  <div id="qrcode"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <script>
+    let qr;
+
+    function generateQRCode() {
+      const link = document.getElementById('linkInput').value;
+      const qrContainer = document.getElementById('qrcode');
+
+      // Limpiar contenido anterior
+      qrContainer.innerHTML = "";
+
+      if (!link.trim()) {
+        alert("Por favor, escribe un enlace válido.");
+        return;
+      }
+
+      // Generar QR
+      qr = new QRCode(qrContainer, {
+        text: link,
+        width: 256,
+        height: 256,
+      });
+    }
+  </script>
+
+</body>
+</html>
