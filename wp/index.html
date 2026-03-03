@@ -1,54 +1,187 @@
 <!DOCTYPE html>
-<html>
-<!-- Plantilla de sitio de tres columnas en HTML5 -->
+<html lang="es">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="JMSR">
-  <meta name="description" content="Plantilla para documento HTML 5">
-  <meta name="keywords" content="HTML, CSS">
-  <title>Plantilla para documento HTML 5</title>
+  <meta name="description" content="Formulario para enviar mensajes por WhatsApp">
+  <meta name="keywords" content="WhatsApp, Mensajería, Contacto">
+  <title>Enviar Mensaje por WhatsApp</title>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      min-height: 100vh;
+      padding: 20px 0;
+    }
+    .whatsapp-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      padding: 40px;
+      margin-top: 50px;
+    }
+    .whatsapp-icon {
+      font-size: 60px;
+      color: #25D366;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #128C7E;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    .btn-whatsapp {
+      background-color: #25D366;
+      border: none;
+      padding: 12px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .btn-whatsapp:hover {
+      background-color: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+    }
+    .form-control:focus {
+      border-color: #25D366;
+      box-shadow: 0 0 0 0.2rem rgba(37, 211, 102, 0.25);
+    }
+    .alert {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container-fluid">
-	<div class="row">
-		<div class="offset-3 col-6 text-center">
-			<label>Número de Teléfono</label>
-			<input type="tel" class="form-control" id="numeroDeTelefono"/>
-			<br/>
-			<label>Mensaje</label>
-			<textarea class="form-control" id="mensaje" rows="3"></textarea>
-			<br/>
-			<button class="btn btn-success" id="enviarWhatsahpp">Enviar</button>
-		</div>
-		<div class="offset-3 col-6 text-center form-group form-check d-none">
-			<input type="checkbox" class="form-check-input" id="con" />
-			<label class="form-check-label" for="con">Check me out</label>
+  <div class="container">
+	<div class="row justify-content-center">
+		<div class="col-lg-6 col-md-8 col-sm-10">
+			<div class="whatsapp-card">
+				<div class="text-center">
+					<div class="whatsapp-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="60" height="60" fill="#25D366">
+							<path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+						</svg>
+					</div>
+					<h1>Enviar Mensaje por WhatsApp</h1>
+				</div>
+				
+				<form id="whatsappForm">
+					<div class="form-group">
+						<label for="numeroDeTelefono"><strong>Número de Teléfono</strong></label>
+						<input 
+							type="tel" 
+							class="form-control" 
+							id="numeroDeTelefono" 
+							placeholder="+52 1234567890"
+							required
+						/>
+						<small class="form-text text-muted">
+							Incluye el código de país (ej: +52 para México, +34 para España)
+						</small>
+					</div>
+					
+					<div class="form-group">
+						<label for="mensaje"><strong>Mensaje</strong></label>
+						<textarea 
+							class="form-control" 
+							id="mensaje" 
+							rows="5" 
+							placeholder="Escribe tu mensaje aquí..."
+							required
+						></textarea>
+						<small class="form-text text-muted">
+							<span id="caracteresRestantes">0</span> caracteres
+						</small>
+					</div>
+					
+					<div class="text-center">
+						<button type="submit" class="btn btn-whatsapp btn-success btn-lg btn-block">
+							📱 Enviar por WhatsApp
+						</button>
+					</div>
+				</form>
+				
+				<div id="alertContainer"></div>
+			</div>
 		</div>
 	</div>
   </div>
   <script>
   $(document).ready(function(){
-	$("#enviarWhatsahpp").on("click",function(){
-		//Aqui vamos a enviar el mensaje de whatsap al numero indicado
-		enviarMensajeWP($("#numeroDeTelefono").val());
+	// Contador de caracteres
+	$("#mensaje").on("input", function(){
+		var length = $(this).val().length;
+		$("#caracteresRestantes").text(length);
+	});
+	
+	// Manejar el envío del formulario
+	$("#whatsappForm").on("submit", function(e){
+		e.preventDefault();
+		
+		var numero = $("#numeroDeTelefono").val().trim();
+		var mensaje = $("#mensaje").val().trim();
+		
+		// Validar que los campos no estén vacíos
+		if(numero === "" || mensaje === ""){
+			mostrarAlerta("Por favor, completa todos los campos.", "warning");
+			return;
+		}
+		
+		// Limpiar el número de teléfono (remover espacios, guiones, etc.)
+		numero = numero.replace(/[\s\-()]/g, '');
+		
+		// Validar formato básico del número
+		if(!validarNumero(numero)){
+			mostrarAlerta("El número de teléfono no es válido. Asegúrate de incluir el código de país (ej: +52).", "danger");
+			return;
+		}
+		
+		// Enviar mensaje
+		enviarMensajeWP(numero, mensaje);
 	});
   });
   
+  function validarNumero(numero){
+	// El número debe empezar con + y tener al menos 10 dígitos
+	var regex = /^\+[1-9]\d{9,14}$/;
+	return regex.test(numero);
+  }
+  
   function enviarMensajeWP(numero, mensaje){
-	if($("#con").is(':checked')){
-		alert("si");
-		var a = document.createElement("a");
-		a.target = "_blank";
-		a.href = "https://api.whatsapp.com/send?phone="+numero+"&"+mensaje;
-		a.click();
-	}else{
-		alert("no");
-		window.open("https://api.whatsapp.com/send?phone="+numero+"&"+mensaje, '_blank');
-	}
+	// Codificar el mensaje para URL
+	var mensajeCodificado = encodeURIComponent(mensaje);
+	
+	// Construir la URL de WhatsApp
+	var url = "https://api.whatsapp.com/send?phone=" + numero + "&text=" + mensajeCodificado;
+	
+	// Mostrar mensaje de éxito
+	mostrarAlerta("Abriendo WhatsApp...", "success");
+	
+	// Abrir WhatsApp en nueva ventana
+	setTimeout(function(){
+		window.open(url, '_blank');
+	}, 500);
+  }
+  
+  function mostrarAlerta(mensaje, tipo){
+	var alertHTML = '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role="alert">' +
+					mensaje +
+					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+					'<span aria-hidden="true">&times;</span>' +
+					'</button>' +
+					'</div>';
+	
+	$("#alertContainer").html(alertHTML);
+	
+	// Auto-ocultar después de 5 segundos
+	setTimeout(function(){
+		$("#alertContainer .alert").alert('close');
+	}, 5000);
   }
   </script>
 </body>
