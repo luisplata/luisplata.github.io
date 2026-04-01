@@ -43,6 +43,7 @@
         <div class="actions">
           <button type="button" id="formatBtn">Formatear</button>
           <button type="button" class="secondary" id="formatClearBtn">Limpiar</button>
+          <button type="button" class="secondary" id="formatCopyBtn">Copiar</button>
         </div>
         <div id="formatterStatus" class="status"></div>
         <pre id="formatterOutput" class="output small"></pre>
@@ -55,6 +56,7 @@
         <div class="actions">
           <button type="button" id="stringifyBtn">Convertir</button>
           <button type="button" class="secondary" id="stringifyClearBtn">Limpiar</button>
+          <button type="button" class="secondary" id="stringifyCopyBtn">Copiar</button>
         </div>
         <div id="stringifyStatus" class="status"></div>
         <textarea id="stringifyOutput" readonly placeholder='{"hello":"world"}'></textarea>
@@ -67,6 +69,7 @@
         <div class="actions">
           <button type="button" id="parseBtn">Convertir</button>
           <button type="button" class="secondary" id="parseClearBtn">Limpiar</button>
+          <button type="button" class="secondary" id="parseCopyBtn">Copiar</button>
         </div>
         <div id="parseStatus" class="status"></div>
         <textarea id="parseOutput" readonly placeholder='{
@@ -80,6 +83,25 @@
     const pretty = (value) => JSON.stringify(value, null, 2);
     const setStatus = (el, message, kind = '') => { el.textContent = message; el.className = `status ${kind}`.trim(); };
     const safeJsonParse = (text) => JSON.parse(text);
+    const copyText = async (text) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      const fallback = document.createElement('textarea');
+      fallback.value = text;
+      fallback.setAttribute('readonly', '');
+      fallback.style.position = 'fixed';
+      fallback.style.left = '-9999px';
+      fallback.style.top = '0';
+      document.body.appendChild(fallback);
+      fallback.select();
+      fallback.setSelectionRange(0, fallback.value.length);
+
+      const copied = document.execCommand('copy');
+      document.body.removeChild(fallback);
+      if (!copied) throw new Error('No se pudo copiar');
+    };
 
     const formatterInput = document.getElementById('formatterInput');
     const formatterOutput = document.getElementById('formatterOutput');
@@ -98,6 +120,16 @@
       formatterInput.value = '';
       formatterOutput.textContent = '';
       setStatus(formatterStatus, '');
+    });
+    document.getElementById('formatCopyBtn').addEventListener('click', async () => {
+      try {
+        const text = formatterOutput.textContent.trim();
+        if (!text) throw new Error('Nada para copiar');
+        await copyText(text);
+        setStatus(formatterStatus, 'Resultado copiado.', 'ok');
+      } catch {
+        setStatus(formatterStatus, 'No se pudo copiar.', 'err');
+      }
     });
 
     const stringifyInput = document.getElementById('stringifyInput');
@@ -118,6 +150,16 @@
       stringifyOutput.value = '';
       setStatus(stringifyStatus, '');
     });
+    document.getElementById('stringifyCopyBtn').addEventListener('click', async () => {
+      try {
+        const text = stringifyOutput.value.trim();
+        if (!text) throw new Error('Nada para copiar');
+        await copyText(text);
+        setStatus(stringifyStatus, 'Resultado copiado.', 'ok');
+      } catch {
+        setStatus(stringifyStatus, 'No se pudo copiar.', 'err');
+      }
+    });
 
     const parseInput = document.getElementById('parseInput');
     const parseOutput = document.getElementById('parseOutput');
@@ -137,6 +179,16 @@
       parseInput.value = '';
       parseOutput.value = '';
       setStatus(parseStatus, '');
+    });
+    document.getElementById('parseCopyBtn').addEventListener('click', async () => {
+      try {
+        const text = parseOutput.value.trim();
+        if (!text) throw new Error('Nada para copiar');
+        await copyText(text);
+        setStatus(parseStatus, 'Resultado copiado.', 'ok');
+      } catch {
+        setStatus(parseStatus, 'No se pudo copiar.', 'err');
+      }
     });
   </script>
 </body>
