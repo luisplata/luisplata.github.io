@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JSON Tools</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #0f172a; --panel: #111827; --card: #1f2937; --text: #e5e7eb; --muted: #94a3b8; --accent: #60a5fa; --border: #334155; --ok: #22c55e; --err: #ef4444; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.5 system-ui, sans-serif; background: linear-gradient(180deg, #020617, #0f172a 30%, #111827); color: var(--text); }
+    main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 48px; }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 4vw, 3rem); }
+    p { margin: 0; color: var(--muted); }
+    .grid { display: grid; gap: 18px; margin-top: 24px; }
+    .card { background: rgba(17, 24, 39, 0.92); border: 1px solid var(--border); border-radius: 18px; padding: 18px; box-shadow: 0 18px 40px rgba(0,0,0,.22); }
+    .card h2 { margin: 0 0 12px; font-size: 1.25rem; }
+    .hint { font-size: .92rem; color: var(--muted); margin-bottom: 12px; }
+    textarea { width: 100%; min-height: 180px; resize: vertical; border-radius: 14px; border: 1px solid var(--border); background: #0b1220; color: var(--text); padding: 14px; font: inherit; outline: none; }
+    textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(96,165,250,.15); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+    button { border: 0; border-radius: 999px; padding: 10px 16px; font: 600 14px/1 system-ui, sans-serif; color: white; background: linear-gradient(135deg, #2563eb, #7c3aed); cursor: pointer; }
+    button.secondary { background: #334155; }
+    button:hover { filter: brightness(1.05); }
+    .status { min-height: 1.25em; font-size: .92rem; color: var(--muted); }
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--err); }
+    .output { min-height: 180px; white-space: pre-wrap; word-break: break-word; background: #0b1220; border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+    .small { font-size: .88rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>JSON Tools</h1>
+      <p>Una sola página, sin dependencias: formatear JSON, convertir JSON a string y volver de string a JSON.</p>
+    </header>
+
+    <section class="grid">
+      <article class="card">
+        <h2>JSON Formatter</h2>
+        <div class="hint">Pegá JSON válido y formatealo arriba.</div>
+        <textarea id="formatterInput" placeholder='{"name":"OpenCode","ok":true}'></textarea>
+        <div class="actions">
+          <button type="button" id="formatBtn">Formatear</button>
+          <button type="button" class="secondary" id="formatClearBtn">Limpiar</button>
+        </div>
+        <div id="formatterStatus" class="status"></div>
+        <pre id="formatterOutput" class="output small"></pre>
+      </article>
+
+      <article class="card">
+        <h2>JSON to String</h2>
+        <div class="hint">Convierte JSON en un string escapado.</div>
+        <textarea id="stringifyInput" placeholder='{"hello":"world"}'></textarea>
+        <div class="actions">
+          <button type="button" id="stringifyBtn">Convertir</button>
+          <button type="button" class="secondary" id="stringifyClearBtn">Limpiar</button>
+        </div>
+        <div id="stringifyStatus" class="status"></div>
+        <textarea id="stringifyOutput" readonly placeholder='{"hello":"world"}'></textarea>
+      </article>
+
+      <article class="card">
+        <h2>String to JSON</h2>
+        <div class="hint">Pegá un string con JSON válido dentro y recuperá el objeto.</div>
+        <textarea id="parseInput" placeholder='"{\"hello\":\"world\"}"'></textarea>
+        <div class="actions">
+          <button type="button" id="parseBtn">Convertir</button>
+          <button type="button" class="secondary" id="parseClearBtn">Limpiar</button>
+        </div>
+        <div id="parseStatus" class="status"></div>
+        <textarea id="parseOutput" readonly placeholder='{
+  "hello": "world"
+}'></textarea>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const pretty = (value) => JSON.stringify(value, null, 2);
+    const setStatus = (el, message, kind = '') => { el.textContent = message; el.className = `status ${kind}`.trim(); };
+    const safeJsonParse = (text) => JSON.parse(text);
+
+    const formatterInput = document.getElementById('formatterInput');
+    const formatterOutput = document.getElementById('formatterOutput');
+    const formatterStatus = document.getElementById('formatterStatus');
+    document.getElementById('formatBtn').addEventListener('click', () => {
+      try {
+        const value = safeJsonParse(formatterInput.value);
+        formatterOutput.textContent = pretty(value);
+        setStatus(formatterStatus, 'JSON formateado correctamente.', 'ok');
+      } catch {
+        formatterOutput.textContent = '';
+        setStatus(formatterStatus, 'JSON inválido.', 'err');
+      }
+    });
+    document.getElementById('formatClearBtn').addEventListener('click', () => {
+      formatterInput.value = '';
+      formatterOutput.textContent = '';
+      setStatus(formatterStatus, '');
+    });
+
+    const stringifyInput = document.getElementById('stringifyInput');
+    const stringifyOutput = document.getElementById('stringifyOutput');
+    const stringifyStatus = document.getElementById('stringifyStatus');
+    document.getElementById('stringifyBtn').addEventListener('click', () => {
+      try {
+        const value = safeJsonParse(stringifyInput.value);
+        stringifyOutput.value = JSON.stringify(JSON.stringify(value));
+        setStatus(stringifyStatus, 'Convertido a string.', 'ok');
+      } catch {
+        stringifyOutput.value = '';
+        setStatus(stringifyStatus, 'JSON inválido.', 'err');
+      }
+    });
+    document.getElementById('stringifyClearBtn').addEventListener('click', () => {
+      stringifyInput.value = '';
+      stringifyOutput.value = '';
+      setStatus(stringifyStatus, '');
+    });
+
+    const parseInput = document.getElementById('parseInput');
+    const parseOutput = document.getElementById('parseOutput');
+    const parseStatus = document.getElementById('parseStatus');
+    document.getElementById('parseBtn').addEventListener('click', () => {
+      try {
+        const raw = safeJsonParse(parseInput.value);
+        const inner = typeof raw === 'string' ? safeJsonParse(raw) : raw;
+        parseOutput.value = pretty(inner);
+        setStatus(parseStatus, 'String convertido a JSON.', 'ok');
+      } catch {
+        parseOutput.value = '';
+        setStatus(parseStatus, 'Entrada inválida.', 'err');
+      }
+    });
+    document.getElementById('parseClearBtn').addEventListener('click', () => {
+      parseInput.value = '';
+      parseOutput.value = '';
+      setStatus(parseStatus, '');
+    });
+  </script>
+</body>
+</html>
