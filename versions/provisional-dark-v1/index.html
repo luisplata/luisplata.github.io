@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luis Plata | Landing vNext</title>
+  <meta name="description" content="Landing page profesional dark mode para servicios de software, QA y experiencias interactivas." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-shapes" aria-hidden="true">
+    <span class="shape shape-1"></span>
+    <span class="shape shape-2"></span>
+    <span class="shape shape-3"></span>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#hero">Luis Plata</a>
+    <nav class="menu" aria-label="Principal">
+      <a id="navServices" href="#services">Servicios</a>
+      <a id="navProof" href="#proof">Resultados</a>
+      <a id="navProjects" href="#projects">Proyectos</a>
+      <a id="navContact" href="#cta">Contacto</a>
+    </nav>
+    <div class="controls">
+      <label for="langSwitch" class="sr-only">Idioma</label>
+      <select id="langSwitch" aria-label="Idioma">
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="hero" id="hero">
+      <div id="heroContent"></div>
+    </section>
+
+    <section class="section" id="proof"></section>
+    <section class="section" id="services"></section>
+    <section class="section" id="projects"></section>
+    <section class="section" id="process"></section>
+    <section class="section" id="cta"></section>
+  </main>
+
+  <template id="emptyStateTemplate">
+    <article class="card empty">
+      <h3>No se pudo cargar la data</h3>
+      <p>Revisá <strong>master.yaml</strong> en esta carpeta.</p>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
