@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luis Plata | Portfolio Atlas</title>
+  <meta name="description" content="Portfolio atlas para Luis Plata, construido desde master.yaml con foco en backend, QA, Unity y automatización." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+    <span class="orb orb-d"></span>
+    <span class="grid"></span>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#hero">
+      <span class="brand-mark">LP</span>
+      <span>
+        <strong>Luis Plata</strong>
+        <small>Portfolio Atlas / 2026</small>
+      </span>
+    </a>
+
+    <nav class="menu" aria-label="Principal">
+      <a id="navHero" href="#hero">Inicio</a>
+      <a id="navServices" href="#services">Servicios</a>
+      <a id="navExperience" href="#experience">Experiencia</a>
+      <a id="navProjects" href="#projects">Proyectos</a>
+      <a id="navContact" href="#contact">Contacto</a>
+    </nav>
+
+    <div class="controls">
+      <label class="sr-only" for="langSwitch">Idioma</label>
+      <select id="langSwitch" aria-label="Idioma">
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" id="hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow" id="heroEyebrow">Atlas de capacidades</p>
+        <h1 id="heroTitle">Una carta de navegación, no una landing genérica.</h1>
+        <p class="hero-text" id="heroText">Convertí master.yaml en un dossier visual: más contraste, más carácter y una lectura que prioriza señales, no relleno.</p>
+
+        <div class="hero-actions">
+          <a id="primaryCta" class="button button-primary" href="#contact">Abrir contacto</a>
+          <a id="secondaryCta" class="button button-secondary" href="#projects">Explorar atlas</a>
+        </div>
+
+        <div class="hero-tags" id="heroTags"></div>
+      </div>
+
+      <aside class="hero-panel reveal">
+        <div class="hero-ribbon">
+          <span>Señal</span>
+          <strong>Backend / QA / Unity</strong>
+        </div>
+        <div class="portrait-frame">
+          <img id="heroPhoto" alt="Luis Plata" hidden />
+        </div>
+        <div class="panel-grid">
+          <article class="panel-stat">
+            <span class="panel-stat__value" id="yearsValue">0+</span>
+            <span class="panel-stat__label" id="yearsLabel">Años</span>
+          </article>
+          <article class="panel-stat">
+            <span class="panel-stat__value" id="projectsValue">0</span>
+            <span class="panel-stat__label" id="projectsLabel">Proyectos</span>
+          </article>
+          <article class="panel-stat">
+            <span class="panel-stat__value" id="talksValue">0</span>
+            <span class="panel-stat__label" id="talksLabel">Charlas</span>
+          </article>
+          <article class="panel-stat">
+            <span class="panel-stat__value" id="skillsValue">0+</span>
+            <span class="panel-stat__label" id="skillsLabel">Tecnologías</span>
+          </article>
+        </div>
+        <p class="panel-note">Diseño intencional: contraste alto, lectura rápida y composición de ficha técnica.</p>
+      </aside>
+    </section>
+
+    <section class="section section-proof" id="proof"></section>
+    <section class="section" id="services"></section>
+    <section class="section" id="experience"></section>
+    <section class="section" id="projects"></section>
+    <section class="section" id="recognition"></section>
+    <section class="section" id="contact"></section>
+  </main>
+
+  <template id="emptyStateTemplate">
+    <article class="card empty-card reveal">
+      <h3>No se pudo cargar la data</h3>
+      <p>Revisá <strong>master.yaml</strong> en esta carpeta.</p>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

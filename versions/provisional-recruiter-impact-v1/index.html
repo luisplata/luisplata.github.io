@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luis Plata | Recruiter Impact Brief</title>
+  <meta name="description" content="Version orientada a reclutadores: impacto, seniority y evidencia tecnica en lectura rapida." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <span class="glow glow-a"></span>
+    <span class="glow glow-b"></span>
+    <span class="glow glow-c"></span>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#hero">
+      <span class="brand-mark">LP</span>
+      <span>
+        <strong>Luis Plata</strong>
+        <small>Recruiter Impact Brief</small>
+      </span>
+    </a>
+
+    <nav class="menu" aria-label="Principal">
+      <a id="navHero" href="#hero">Overview</a>
+      <a id="navServices" href="#services">Value</a>
+      <a id="navExperience" href="#experience">Experience</a>
+      <a id="navProjects" href="#projects">Proof</a>
+      <a id="navContact" href="#contact">Contact</a>
+    </nav>
+
+    <div class="controls">
+      <label class="sr-only" for="langSwitch">Idioma</label>
+      <select id="langSwitch" aria-label="Idioma">
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" id="hero">
+      <div class="hero-main reveal">
+        <p class="eyebrow" id="heroEyebrow">Top candidate profile</p>
+        <h1 id="heroTitle">Senior execution mindset, measurable delivery.</h1>
+        <p class="hero-text" id="heroText">Esta version esta disenada para reclutadores: comunica valor, evidencia y fit tecnico en segundos.</p>
+
+        <div class="hero-actions">
+          <a id="primaryCta" class="button primary" href="#contact">Contactar</a>
+          <a id="secondaryCta" class="button" href="#projects">Ver pruebas</a>
+        </div>
+
+        <div class="hero-tags" id="heroTags"></div>
+      </div>
+
+      <aside class="hero-side reveal">
+        <div class="portrait-wrap">
+          <img id="heroPhoto" alt="Luis Plata" hidden />
+          <div class="stamp">AVAILABLE FOR SENIOR ROLES</div>
+        </div>
+        <div class="quick-metrics">
+          <article class="metric-tile"><span id="yearsValue" class="value">0+</span><span id="yearsLabel" class="label">Anios</span></article>
+          <article class="metric-tile"><span id="projectsValue" class="value">0</span><span id="projectsLabel" class="label">Projects</span></article>
+          <article class="metric-tile"><span id="talksValue" class="value">0</span><span id="talksLabel" class="label">Talks</span></article>
+          <article class="metric-tile"><span id="skillsValue" class="value">0+</span><span id="skillsLabel" class="label">Tech</span></article>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section impact-section" id="proof"></section>
+    <section class="section" id="services"></section>
+    <section class="section" id="experience"></section>
+    <section class="section" id="projects"></section>
+    <section class="section" id="recognition"></section>
+    <section class="section" id="contact"></section>
+  </main>
+
+  <template id="emptyStateTemplate">
+    <article class="card empty-state">
+      <h3>No se pudo cargar la data</h3>
+      <p>Revisa master.yaml en esta carpeta.</p>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

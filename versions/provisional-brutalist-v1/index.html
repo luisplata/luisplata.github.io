@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luis Plata | Brutalist Signal</title>
+  <meta name="description" content="Tercera direccion visual: brutalista, tipografica y de alto contraste para portfolio tecnico." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#hero">
+      <span class="brand__mark">LP</span>
+      <span class="brand__text">Brutalist Signal</span>
+    </a>
+
+    <nav class="menu" aria-label="Principal">
+      <a id="navHero" href="#hero">Inicio</a>
+      <a id="navServices" href="#services">Servicios</a>
+      <a id="navExperience" href="#experience">Experiencia</a>
+      <a id="navProjects" href="#projects">Proyectos</a>
+      <a id="navContact" href="#contact">Contacto</a>
+    </nav>
+
+    <div class="controls">
+      <label class="sr-only" for="langSwitch">Idioma</label>
+      <select id="langSwitch" aria-label="Idioma">
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" id="hero">
+      <div class="hero__manifest card reveal">
+        <p class="kicker" id="heroEyebrow">Signal Pack</p>
+        <h1 id="heroTitle">Diseno con impacto directo.</h1>
+        <p id="heroText" class="hero__text">Una tercera direccion visual de alto contraste, pensada para cortar con el estilo de las otras versiones.</p>
+
+        <div class="hero__actions">
+          <a id="primaryCta" class="btn btn--primary" href="#contact">Contacto</a>
+          <a id="secondaryCta" class="btn btn--line" href="#projects">Ver atlas</a>
+        </div>
+
+        <div class="chip-row" id="heroTags"></div>
+      </div>
+
+      <aside class="hero__rail card reveal">
+        <img id="heroPhoto" class="hero__photo" alt="Luis Plata" hidden />
+        <div class="stat-grid">
+          <article class="stat-box">
+            <span id="yearsValue" class="stat-box__value">0+</span>
+            <span id="yearsLabel" class="stat-box__label">Anios</span>
+          </article>
+          <article class="stat-box">
+            <span id="projectsValue" class="stat-box__value">0</span>
+            <span id="projectsLabel" class="stat-box__label">Proyectos</span>
+          </article>
+          <article class="stat-box">
+            <span id="talksValue" class="stat-box__value">0</span>
+            <span id="talksLabel" class="stat-box__label">Charlas</span>
+          </article>
+          <article class="stat-box">
+            <span id="skillsValue" class="stat-box__value">0+</span>
+            <span id="skillsLabel" class="stat-box__label">Tech</span>
+          </article>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="proof"></section>
+    <section class="section" id="services"></section>
+    <section class="section" id="experience"></section>
+    <section class="section" id="projects"></section>
+    <section class="section" id="recognition"></section>
+    <section class="section" id="contact"></section>
+  </main>
+
+  <template id="emptyStateTemplate">
+    <article class="card empty-state">
+      <h3>No se pudo cargar la data</h3>
+      <p>Revisa master.yaml en esta carpeta.</p>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
