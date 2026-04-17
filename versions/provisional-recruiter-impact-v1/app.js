@@ -7,7 +7,6 @@ const state = {
 };
 
 const el = {
-  heroEyebrow: document.getElementById("heroEyebrow"),
   heroTitle: document.getElementById("heroTitle"),
   heroText: document.getElementById("heroText"),
   heroTags: document.getElementById("heroTags"),
@@ -39,14 +38,13 @@ const el = {
 
 const copy = {
   es: {
-    heroEyebrow: "Top candidate profile",
-    heroTitle: "Senior execution mindset, measurable delivery.",
+    heroTitle: "Luis Enrique Plata Osorio",
     heroText:
-      "Esta version esta disenada para reclutadores: comunica valor, evidencia y fit tecnico en segundos.",
+      "Software Engineer con mentalidad de ejecucion senior y entrega medible.",
     primaryCta: "Contactar ahora",
     secondaryCta: "Ver evidencia",
-    years: "Anios de experiencia",
-    projects: "Proyectos publicados",
+    years: "Años de experiencia",
+    projects: "Proyectos publicos",
     talks: "Charlas tecnicas",
     skills: "Tecnologias",
     proofTitle: "Impacto medible",
@@ -80,12 +78,18 @@ const copy = {
     achievementsLabel: "Logros",
     educationLabel: "Educacion",
     certificationLabel: "Certificaciones",
-    hiringSignalA: "Listo para liderazgo tecnico",
-    hiringSignalB: "Backend + QA + Unity",
-    hiringSignalC: "Entrega y calidad medible",
+    roleFitTitle: "Role fit rapido",
+    roleFitSubtitle: "Probabilidad de encaje por foco tecnico",
+    roleBackend: "Backend Engineer / Lead",
+    roleQa: "QA Automation Engineer",
+    roleGame: "Unity Developer",
+    roleDevops: "Platform / DevOps Engineer",
+    whatsapp: "WhatsApp",
+    hiringSignalA: "Liderazgo",
+    hiringSignalB: "Versátil",
+    hiringSignalC: "Calidad",
   },
   en: {
-    heroEyebrow: "Top candidate profile",
     heroTitle: "Senior execution mindset, measurable delivery.",
     heroText:
       "This version is built for recruiters: it communicates value, evidence, and technical fit in seconds.",
@@ -126,9 +130,16 @@ const copy = {
     achievementsLabel: "Achievements",
     educationLabel: "Education",
     certificationLabel: "Certifications",
-    hiringSignalA: "Ready for technical leadership",
-    hiringSignalB: "Backend + QA + Unity",
-    hiringSignalC: "Measurable delivery and quality",
+    roleFitTitle: "Quick role fit",
+    roleFitSubtitle: "Estimated fit by technical focus",
+    roleBackend: "Backend Engineer / Lead",
+    roleQa: "QA Automation Engineer",
+    roleGame: "Unity Developer",
+    roleDevops: "Platform / DevOps Engineer",
+    whatsapp: "WhatsApp",
+    hiringSignalA: "Leadership",
+    hiringSignalB: "Versatile",
+    hiringSignalC: "Quality",
   },
 };
 
@@ -195,6 +206,11 @@ function computeYearsExperience(experience) {
   return Math.max(1, new Date().getFullYear() - Math.min(...years) + 1);
 }
 
+function getSafeWhatsApp(phone) {
+  const digits = String(phone || "").replace(/\D/g, "");
+  return digits ? `https://wa.me/${digits}` : "";
+}
+
 function countSkills(skills) {
   const all = Object.values(skills || {}).flatMap((items) => (Array.isArray(items) ? items : []));
   return new Set(all).size;
@@ -222,6 +238,21 @@ function extractImpactSignals(experience) {
   return values;
 }
 
+function getRoleFitScores(data) {
+  const skills = data?.skills || {};
+  const backend = Math.min(99, 65 + Math.round((skills.backend?.length || 0) / 3));
+  const qa = Math.min(99, 58 + Math.round((skills.qa?.length || 0) / 3));
+  const game = Math.min(99, 52 + Math.round((skills.gamedev?.length || 0) / 3));
+  const devops = Math.min(99, 48 + Math.round((skills.devops?.length || 0) / 4));
+
+  return [
+    { label: tx("roleBackend"), score: backend },
+    { label: tx("roleQa"), score: qa },
+    { label: tx("roleGame"), score: game },
+    { label: tx("roleDevops"), score: devops },
+  ];
+}
+
 function setLabels() {
   el.navHero.textContent = tx("navHero");
   el.navServices.textContent = tx("navServices");
@@ -229,7 +260,6 @@ function setLabels() {
   el.navProjects.textContent = tx("navProjects");
   el.navContact.textContent = tx("navContact");
 
-  el.heroEyebrow.textContent = tx("heroEyebrow");
   el.heroTitle.textContent = tx("heroTitle");
   el.heroText.textContent = tx("heroText");
   el.primaryCta.textContent = tx("primaryCta");
@@ -257,7 +287,7 @@ function buildHero() {
     tx("hiringSignalC"),
   ].filter(Boolean);
 
-  el.heroTags.innerHTML = tags.map((tag) => `<span class="chip"><strong>•</strong> ${escapeHtml(tag)}</span>`).join("");
+  el.heroTags.innerHTML = tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
 
   if (personal.photo_url) {
     el.heroPhoto.src = personal.photo_url;
@@ -284,8 +314,21 @@ function buildProof() {
       <span class="metric-label">${escapeHtml(tx("impact"))}</span>
     </article>`);
 
+  const roleFitCards = getRoleFitScores(state.data)
+    .map(
+      (item) => `
+      <article class="role-fit-item">
+        <div class="role-fit-head">
+          <strong>${escapeHtml(item.label)}</strong>
+          <span>${escapeHtml(String(item.score))}%</span>
+        </div>
+        <div class="role-fit-bar"><span style="width:${escapeHtml(String(item.score))}%"></span></div>
+      </article>`
+    )
+    .join("");
+
   el.proof.innerHTML = `
-    ${sectionHeader(tx("proofTitle"), tx("proofSubtitle"), [tx("impact"), tx("focus")])}
+    ${sectionHeader(tx("proofTitle"), tx("proofSubtitle"), [])}
     <div class="proof-grid">
       <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(years))}+</span><span class="metric-label">${escapeHtml(tx("years"))}</span></article>
       <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String((state.data?.projects || []).length))}</span><span class="metric-label">${escapeHtml(tx("projects"))}</span></article>
@@ -295,7 +338,12 @@ function buildProof() {
     </div>
     <div class="metric-panel reveal">
       <p>${escapeHtml(tx("proofQuote"))}</p>
-    </div>`;
+    </div>
+    <article class="role-fit reveal">
+      <h3>${escapeHtml(tx("roleFitTitle"))}</h3>
+      <p>${escapeHtml(tx("roleFitSubtitle"))}</p>
+      <div class="role-fit-grid">${roleFitCards}</div>
+    </article>`;
 }
 
 function buildServices() {
@@ -308,7 +356,7 @@ function buildServices() {
       ${asList(service.items || [], 5)}
     </article>`);
 
-  el.services.innerHTML = `${sectionHeader(tx("servicesTitle"), tx("servicesSubtitle"), [tx("focus")])}<div class="card-grid">${cards.join("")}</div>`;
+  el.services.innerHTML = `${sectionHeader(tx("servicesTitle"), tx("servicesSubtitle"), [])}<div class="card-grid">${cards.join("")}</div>`;
 }
 
 function buildExperience() {
@@ -333,7 +381,7 @@ function buildExperience() {
       </article>`;
   });
 
-  el.experience.innerHTML = `${sectionHeader(tx("experienceTitle"), tx("experienceSubtitle"), [tx("roleLabel"), tx("achievementsLabel")])}<div class="experience-grid">${cards.join("")}</div>`;
+  el.experience.innerHTML = `${sectionHeader(tx("experienceTitle"), tx("experienceSubtitle"), [])}<div class="experience-grid">${cards.join("")}</div>`;
 }
 
 function buildProjects() {
@@ -349,7 +397,7 @@ function buildProjects() {
       ${project.link ? `<a class="project-link" href="${escapeHtml(project.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(tx("viewProject"))}</a>` : ""}
     </article>`);
 
-  el.projects.innerHTML = `${sectionHeader(tx("projectsTitle"), tx("projectsSubtitle"), [tx("impact")])}<div class="card-grid">${cards.join("")}</div>`;
+  el.projects.innerHTML = `${sectionHeader(tx("projectsTitle"), tx("projectsSubtitle"), [])}<div class="card-grid">${cards.join("")}</div>`;
 }
 
 function buildRecognition() {
@@ -370,18 +418,20 @@ function buildRecognition() {
     `<article class="card reveal"><h3>${escapeHtml(tx("educationLabel"))}</h3><ul class="recognition-list">${education.slice(0, 4).map((item) => `<li>${escapeHtml(t(item.name))}${item.year ? ` · ${escapeHtml(item.year)}` : ""}</li>`).join("") || "<li>-</li>"}</ul></article>`
   ];
 
-  el.recognition.innerHTML = `${sectionHeader(tx("recognitionTitle"), tx("recognitionSubtitle"), [tx("credentials")])}<div class="recognition-grid">${talkCards.join("")}${credentialCards.join("")}</div>`;
+  el.recognition.innerHTML = `${sectionHeader(tx("recognitionTitle"), tx("recognitionSubtitle"), [])}<div class="recognition-grid">${talkCards.join("")}${credentialCards.join("")}</div>`;
 }
 
 function buildContact() {
   const personal = state.data?.personal || {};
   const links = state.data?.links || {};
+  const whatsAppLink = getSafeWhatsApp(personal.phone);
 
   const actions = [
     personal.email ? `<a class="button primary" href="mailto:${escapeHtml(personal.email)}">${iconMarkup("mail")}<span>${escapeHtml(tx("email"))}</span></a>` : "",
     links.linkedin ? `<a class="button" href="${escapeHtml(links.linkedin)}" target="_blank" rel="noopener noreferrer">${iconMarkup("linkedin")}<span>${escapeHtml(tx("linkedin"))}</span></a>` : "",
     links.github ? `<a class="button" href="${escapeHtml(links.github)}" target="_blank" rel="noopener noreferrer">${iconMarkup("github")}<span>${escapeHtml(tx("github"))}</span></a>` : "",
     links.portfolio ? `<a class="button" href="${escapeHtml(links.portfolio)}" target="_blank" rel="noopener noreferrer">${iconMarkup("portfolio")}<span>${escapeHtml(tx("portfolio"))}</span></a>` : "",
+    whatsAppLink ? `<a class="button" href="${escapeHtml(whatsAppLink)}" target="_blank" rel="noopener noreferrer"><span>${escapeHtml(tx("whatsapp"))}</span></a>` : "",
   ].filter(Boolean);
 
   el.contact.innerHTML = `
