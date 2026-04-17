@@ -90,9 +90,9 @@ const copy = {
     hiringSignalC: "Calidad",
   },
   en: {
-    heroTitle: "Senior execution mindset, measurable delivery.",
+    heroTitle: "Luis Enrique Plata Osorio",
     heroText:
-      "This version is built for recruiters: it communicates value, evidence, and technical fit in seconds.",
+      "Software Engineer with a senior execution mindset and measurable delivery.",
     primaryCta: "Contact now",
     secondaryCta: "View evidence",
     years: "Years of experience",
