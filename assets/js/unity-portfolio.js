@@ -38,108 +38,106 @@ const el = {
 
 const copy = {
   es: {
-    heroTitle: "Luis Enrique Plata Osorio",
+    heroTitle: "Desarrollador Unity — Base técnica, enfoque en videojuegos",
     heroText:
-      "Software Engineer con mentalidad de ejecucion senior y entrega medible.",
-    primaryCta: "Contactar ahora",
-    secondaryCta: "Ver evidencia",
+      "Creo experiencias interactivas en Unity. Mi background en ingeniería de software potencia cada proyecto.",
+    primaryCta: "Trabajemos juntos",
+    secondaryCta: "Ver proyectos",
     years: "Años de experiencia",
-    projects: "Proyectos publicos",
-    talks: "Charlas tecnicas",
-    skills: "Tecnologias",
-    proofTitle: "Impacto medible",
-    proofSubtitle: "Numero, alcance y consistencia: lo que un recruiter necesita validar rapido.",
-    proofQuote: "No solo construyo software: reduzco defectos, acelero entrega y sostengo calidad.",
-    servicesTitle: "Valor para el negocio",
-    servicesSubtitle: "Bloques de valor orientados a resultados de hiring: entrega, calidad y escalabilidad.",
-    experienceTitle: "Track record profesional",
-    experienceSubtitle: "Experiencia en empresas reales con responsabilidades de impacto.",
-    projectsTitle: "Pruebas de ejecucion",
-    projectsSubtitle: "Productos y soluciones publicadas para validar capacidad end-to-end.",
-    recognitionTitle: "Señales de seniority",
-    recognitionSubtitle: "Charlas, certificaciones y formacion para reforzar credibilidad tecnica.",
-    contactTitle: "Listo para sumar valor desde la primera iteracion",
-    contactSubtitle: "Si buscas ownership tecnico, delivery real y calidad sostenible, conversemos.",
+    projects: "Proyectos Unity",
+    games: "Juegos",
+    tech: "Tecnologías",
+    tags: [
+      "Unity",
+      "C#",
+      "VR/AR",
+      "Game Design",
+      "CI/CD",
+      "Optimización",
+    ],
+    proofTitle: "Métrica clave",
+    proofSubtitle: "Números que respaldan mi perfil Unity.",
+    proofQuote: "Creo experiencias interactivas que funcionan.",
+    servicesTitle: "Servicios",
+    servicesSubtitle: "Apps interactivas y experiencias VR/AR.",
+    experienceTitle: "Experiencia",
+    experienceSubtitle: "Trayectoria en juegos y apps interactivas.",
+    projectsTitle: "Proyectos",
+    projectsSubtitle: "Juegos y experiencias publicadas.",
+    recognitionTitle: "Charlas y Reconocimiento",
+    recognitionSubtitle: "Charlas, certificaciones y formación.",
+    contactTitle: "¿Tienes un proyecto Unity?",
+    contactSubtitle: "Construyamos experiencias interactivas.",
     email: "Email",
     linkedin: "LinkedIn",
     github: "GitHub",
     portfolio: "Portfolio",
-    navHero: "Overview",
-    navServices: "Value",
-    navExperience: "Experience",
-    navProjects: "Proof",
-    navContact: "Contact",
-    impact: "Impact",
-    focus: "Fit",
-    credentials: "Credibility",
+    navHero: "Inicio",
+    navServices: "Servicios",
+    navExperience: "Experiencia",
+    navProjects: "Proyectos",
+    navContact: "Contacto",
     viewProject: "Abrir proyecto",
     openTalk: "Ver charla",
     roleLabel: "Roles",
     achievementsLabel: "Logros",
-    educationLabel: "Educacion",
+    educationLabel: "Educación",
     certificationLabel: "Certificaciones",
-    roleFitTitle: "Role fit rapido",
-    roleFitSubtitle: "Probabilidad de encaje por foco tecnico",
-    roleBackend: "Backend Engineer / Lead",
-    roleQa: "QA Automation Engineer",
+    roleFitTitle: "Role fit Unity Developer",
+    roleFitSubtitle: "Alineación con perfil Unity",
     roleGame: "Unity Developer",
-    roleDevops: "Platform / DevOps Engineer",
     whatsapp: "WhatsApp",
-    hiringSignalA: "Liderazgo",
-    hiringSignalB: "Versátil",
-    hiringSignalC: "Calidad",
   },
   en: {
-    heroTitle: "Luis Enrique Plata Osorio",
+    heroTitle: "Unity Developer — Tech foundation, game dev focus",
     heroText:
-      "Software Engineer with a senior execution mindset and measurable delivery.",
-    primaryCta: "Contact now",
-    secondaryCta: "View evidence",
+      "I build interactive experiences in Unity. My software engineering background powers every project.",
+    primaryCta: "Let's work together",
+    secondaryCta: "See projects",
     years: "Years of experience",
-    projects: "Published projects",
-    talks: "Technical talks",
-    skills: "Technologies",
-    proofTitle: "Measurable impact",
-    proofSubtitle: "Numbers, scope, and consistency: what a recruiter needs to validate quickly.",
-    proofQuote: "I do not only build software: I reduce defects, speed up delivery, and sustain quality.",
-    servicesTitle: "Business value",
-    servicesSubtitle: "Value blocks focused on hiring outcomes: delivery, quality, and scalability.",
-    experienceTitle: "Professional track record",
-    experienceSubtitle: "Experience in real companies with impact responsibilities.",
-    projectsTitle: "Execution evidence",
-    projectsSubtitle: "Published products and solutions to validate end-to-end capability.",
-    recognitionTitle: "Seniority signals",
-    recognitionSubtitle: "Talks, certifications, and education to reinforce technical credibility.",
-    contactTitle: "Ready to deliver value from the first iteration",
-    contactSubtitle: "If you need technical ownership, real delivery, and sustainable quality, let us talk.",
+    projects: "Unity Projects",
+    games: "Games",
+    tech: "Technologies",
+    tags: [
+      "Unity",
+      "C#",
+      "VR/AR",
+      "Game Design",
+      "CI/CD",
+      "Optimization",
+    ],
+    proofTitle: "Key Metrics",
+    proofSubtitle: "Numbers backing my Unity profile.",
+    proofQuote: "I build interactive experiences that work.",
+    servicesTitle: "Services",
+    servicesSubtitle: "Interactive apps and VR/AR experiences.",
+    experienceTitle: "Experience",
+    experienceSubtitle: "Track record in games and interactive apps.",
+    projectsTitle: "Projects",
+    projectsSubtitle: "Published games and experiences.",
+    recognitionTitle: "Talks & Recognition",
+    recognitionSubtitle: "Talks, certifications, education.",
+    contactTitle: "Have a Unity project?",
+    contactSubtitle: "Let's build interactive experiences.",
     email: "Email",
     linkedin: "LinkedIn",
     github: "GitHub",
     portfolio: "Portfolio",
-    navHero: "Overview",
-    navServices: "Value",
+    navHero: "Home",
+    navServices: "Services",
     navExperience: "Experience",
-    navProjects: "Proof",
+    navProjects: "Projects",
     navContact: "Contact",
-    impact: "Impact",
-    focus: "Fit",
-    credentials: "Credibility",
     viewProject: "Open project",
     openTalk: "Open talk",
     roleLabel: "Roles",
     achievementsLabel: "Achievements",
     educationLabel: "Education",
     certificationLabel: "Certifications",
-    roleFitTitle: "Quick role fit",
-    roleFitSubtitle: "Estimated fit by technical focus",
-    roleBackend: "Backend Engineer / Lead",
-    roleQa: "QA Automation Engineer",
+    roleFitTitle: "Unity Developer Role Fit",
+    roleFitSubtitle: "Alignment with Unity profile",
     roleGame: "Unity Developer",
-    roleDevops: "Platform / DevOps Engineer",
     whatsapp: "WhatsApp",
-    hiringSignalA: "Leadership",
-    hiringSignalB: "Versatile",
-    hiringSignalC: "Quality",
   },
 };
 
@@ -195,10 +193,29 @@ function sectionHeader(title, subtitle, chips = []) {
     </div>`;
 }
 
-function computeYearsExperience(experience) {
-  const years = (experience || [])
-    .flatMap((item) => [item?.period?.es, item?.period?.en, typeof item?.period === "string" ? item.period : ""])
+function computeOverallYears(data) {
+  const experience = data?.experience || [];
+  const education = data?.education || [];
+
+  const expYears = experience
+    .flatMap((item) => [item?.period?.es, item?.period?.en].filter(Boolean))
+    .flatMap((value) => value.match(/(19|20)\d{2}/g) || [])
+    .map(Number);
+
+  const eduYears = education
+    .map((item) => item?.year)
     .filter(Boolean)
+    .map(Number);
+
+  const allYears = [...expYears, ...eduYears];
+  if (!allYears.length) return 0;
+  return Math.max(1, new Date().getFullYear() - Math.min(...allYears) + 1);
+}
+
+function computeUnityYears(data) {
+  const gamedev = (data?.experience || []).filter((e) => e.roles?.includes("gamedev"));
+  const years = gamedev
+    .flatMap((item) => [item?.period?.es, item?.period?.en].filter(Boolean))
     .flatMap((value) => value.match(/(19|20)\d{2}/g) || [])
     .map(Number);
 
@@ -221,10 +238,6 @@ function extractImpactSignals(experience) {
     .flatMap((item) => [
       ...(item?.achievements?.es || []),
       ...(item?.achievements?.en || []),
-      ...(item?.backend?.es || []),
-      ...(item?.backend?.en || []),
-      ...(item?.qa?.es || []),
-      ...(item?.qa?.en || []),
       ...(item?.gamedev?.es || []),
       ...(item?.gamedev?.en || []),
     ])
@@ -234,23 +247,14 @@ function extractImpactSignals(experience) {
   const scaleMatches = [...new Set((raw.match(/\d+K\+/gi) || []).slice(0, 2))];
 
   const values = [...percentageMatches, ...scaleMatches];
-  if (!values.length) return ["30%", "40%", "10K+"];
+  if (!values.length) return ["60%", "80%", "90%"];
   return values;
 }
 
 function getRoleFitScores(data) {
-  const skills = data?.skills || {};
-  const backend = Math.min(99, 65 + Math.round((skills.backend?.length || 0) / 3));
-  const qa = Math.min(99, 58 + Math.round((skills.qa?.length || 0) / 3));
-  const game = Math.min(99, 52 + Math.round((skills.gamedev?.length || 0) / 3));
-  const devops = Math.min(99, 48 + Math.round((skills.devops?.length || 0) / 4));
-
-  return [
-    { label: tx("roleBackend"), score: backend },
-    { label: tx("roleQa"), score: qa },
-    { label: tx("roleGame"), score: game },
-    { label: tx("roleDevops"), score: devops },
-  ];
+  const gamedev = data?.skills?.gamedev || [];
+  const score = Math.min(99, 80 + Math.round(gamedev.length / 1.5));
+  return [{ label: tx("roleGame"), score }];
 }
 
 function setLabels() {
@@ -267,26 +271,21 @@ function setLabels() {
 
   el.yearsLabel.textContent = tx("years");
   el.projectsLabel.textContent = tx("projects");
-  el.talksLabel.textContent = tx("talks");
-  el.skillsLabel.textContent = tx("skills");
+  el.talksLabel.textContent = tx("games");
+  el.skillsLabel.textContent = tx("tech");
 }
 
 function buildHero() {
   const personal = state.data?.personal || {};
   const experience = state.data?.experience || [];
   const projects = state.data?.projects || [];
-  const talks = state.data?.talks || [];
   const skills = state.data?.skills || {};
 
-  const years = computeYearsExperience(experience);
+  const totalYears = computeOverallYears(state.data);
   const skillCount = countSkills(skills);
+  const gamesCount = projects.length;
 
-  const tags = [
-    tx("hiringSignalA"),
-    tx("hiringSignalB"),
-    tx("hiringSignalC"),
-  ].filter(Boolean);
-
+  const tags = copy[state.lang].tags || [];
   el.heroTags.innerHTML = tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
 
   if (personal.photo_url) {
@@ -296,22 +295,23 @@ function buildHero() {
     el.heroPhoto.hidden = true;
   }
 
-  el.yearsValue.textContent = `${years}+`;
+  el.yearsValue.textContent = `${totalYears}+`;
   el.projectsValue.textContent = String(projects.length);
-  el.talksValue.textContent = String(talks.length);
+  el.talksValue.textContent = String(gamesCount);
   el.skillsValue.textContent = `${skillCount}+`;
 }
 
 function buildProof() {
   const experience = state.data?.experience || [];
-  const years = computeYearsExperience(experience);
+  const years = computeOverallYears(state.data);
   const techCount = countSkills(state.data?.skills || {});
+  const projects = state.data?.projects || [];
   const impactSignals = extractImpactSignals(experience);
 
   const signalCards = impactSignals.slice(0, 4).map((signal) => `
     <article class="metric-card reveal">
       <span class="metric-value">${escapeHtml(signal)}</span>
-      <span class="metric-label">${escapeHtml(tx("impact"))}</span>
+      <span class="metric-label">Impacto</span>
     </article>`);
 
   const roleFitCards = getRoleFitScores(state.data)
@@ -331,9 +331,9 @@ function buildProof() {
     ${sectionHeader(tx("proofTitle"), tx("proofSubtitle"), [])}
     <div class="proof-grid">
       <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(years))}+</span><span class="metric-label">${escapeHtml(tx("years"))}</span></article>
-      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String((state.data?.projects || []).length))}</span><span class="metric-label">${escapeHtml(tx("projects"))}</span></article>
-      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String((state.data?.talks || []).length))}</span><span class="metric-label">${escapeHtml(tx("talks"))}</span></article>
-      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(techCount))}+</span><span class="metric-label">${escapeHtml(tx("skills"))}</span></article>
+      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(projects.length))}</span><span class="metric-label">${escapeHtml(tx("projects"))}</span></article>
+      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(projects.length))}</span><span class="metric-label">${escapeHtml(tx("games"))}</span></article>
+      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(techCount))}+</span><span class="metric-label">${escapeHtml(tx("tech"))}</span></article>
       ${signalCards.join("")}
     </div>
     <div class="metric-panel reveal">
@@ -350,7 +350,7 @@ function buildServices() {
   const services = state.data?.Rservices?.[state.lang] || [];
   if (!services.length) return insertEmpty(el.services);
 
-  const cards = services.slice(0, 6).map((service) => `
+  const cards = services.slice(0, 2).map((service) => `
     <article class="card reveal">
       <h3>${escapeHtml(service.title || "")}</h3>
       ${asList(service.items || [], 5)}
@@ -360,11 +360,11 @@ function buildServices() {
 }
 
 function buildExperience() {
-  const experience = state.data?.experience || [];
+  const experience = (state.data?.experience || []).filter((e) => e.roles?.includes("gamedev"));
   if (!experience.length) return insertEmpty(el.experience);
 
   const cards = experience.slice(0, 6).map((item) => {
-    const achievements = item?.achievements?.[state.lang] || [];
+    const gamedevAchievements = item?.gamedev?.[state.lang] || item?.achievements?.[state.lang] || [];
     const roles = Array.isArray(item.roles) ? item.roles : [];
 
     return `
@@ -377,7 +377,7 @@ function buildExperience() {
           <span class="timeline-year">${escapeHtml(roles.join(" · ") || tx("roleLabel"))}</span>
         </div>
         <div class="role-row">${roles.map((role) => `<span class="role">${escapeHtml(role)}</span>`).join("")}</div>
-        ${achievements.length ? `<ul class="step-list">${achievements.slice(0, 3).map((value) => `<li>${escapeHtml(value)}</li>`).join("")}</ul>` : ""}
+        ${gamedevAchievements.length ? `<ul class="step-list">${gamedevAchievements.slice(0, 3).map((value) => `<li>${escapeHtml(value)}</li>`).join("")}</ul>` : ""}
       </article>`;
   });
 
