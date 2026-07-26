@@ -1,6 +1,6 @@
 personal:
   name: Luis Enrique Plata Osorio
-  headline: Software Engineer • Game Developer • QA Automation
+  headline: Unity Developer
   location: Bogotá, Colombia
   email: luisplata@gmail.com
   phone: "+57 3015086264"
@@ -13,67 +13,6 @@ links:
   itch: https://peryloth.itch.io
 
 skills:
-  backend:
-    # Lenguajes
-    - Java
-    - Golang (Go)
-    - Node.js
-    - PHP
-    - C#
-    - JavaScript
-    - TypeScript
-    - Python
-    # Frameworks & Libraries
-    - Spring Boot
-    - Spring Framework
-    - Spring webflux
-    - Hibernate
-    - Laravel
-    - Express.js
-    - Gin (Golang)
-    - FastAPI
-    - Django
-    # Bases de Datos
-    - PostgreSQL
-    - SQLite
-    - DynamoDB
-    - MariaDB
-    - MySQL
-    - MongoDB
-    - Firebase
-    - Redis
-    - SQL
-    - NoSQL
-    # Arquitectura & Patrones
-    - REST APIs
-    - GraphQL
-    - Microservices
-    - Event-Driven Architecture
-    - SOLID Principles
-    - Design Patterns
-    # Cloud & DevOps
-    - AWS (EC2, S3, Lambda, RDS)
-    - Google Cloud
-    - Docker
-    - Kubernetes
-    - Git
-    - GitHub Actions
-    - CI/CD Pipelines
-    # Testing & Calidad
-    - JUnit
-    - PHPUnit
-    - Pest
-    - Mockito
-    - Jest
-    - Testing Best Practices
-    - API Testing
-    # Otros
-    - OpenAPI/Swagger
-    - Apache Kafka
-    - RabbitMQ
-    - Message Queues
-    - Concurrency & Threading
-    
   gamedev:
     # Game Engine
     - Unity
@@ -110,116 +49,6 @@ skills:
     - Mobile Builds (iOS/Android)
     - PC Builds
     - Build Optimization
-    
-  qa:
-    # Testing Frameworks
-    - Playwright
-    - Karate
-    - Selenium
-    - Cypress
-    - PHPUnit
-    - Pest
-    - Jest
-    - Jasmine
-    # Testing Types
-    - Unit Testing
-    - Integration Testing
-    - End-to-End Testing (E2E)
-    - API Testing
-    - Performance Testing
-    - Load Testing
-    - Visual Regression Testing
-    # CI/CD & Automation
-    - CI/CD Pipelines
-    - GitHub Actions
-    - Jenkins
-    - Automated Test Execution
-    - Test Reporting
-    # Languages for Testing
-    - Java
-    - JavaScript
-    - TypeScript
-    - PHP
-    - Python
-    - Gherkin (BDD)
-    # Tools & Platforms
-    - Jira
-    - Postman
-    - REST Client
-    - DevTools
-    - Network Analysis
-    - Azure DevOps
-    # Best Practices
-    - Test-Driven Development (TDD)
-    - BDD (Behavior-Driven Development)
-    - Test Automation Strategy
-    - Test Maintenance
-    - ScreenPlay Pattern
-    - Shift-Left Testing
-    - Code Coverage Analysis
-    
-  frontend:
-    # Frameworks & Libraries
-    - Vue.js
-    - JavaScript
-    - TypeScript
-    # Testing
-    - Cypress
-    - Playwright
-    - Jest
-    - End-to-End Testing
-    # Tools
-    - Browser DevTools
-    - Component Testing
-  
-  devops:
-    # Version Control
-    - Git
-    - GitHub
-    - GitLab
-    - Branching Strategies
-    # CI/CD
-    - GitHub Actions
-    - Jenkins
-    - GitLab CI/CD
-    - Pipeline Design
-    - Test Parallelization
-    - Test Sharding
-    # Containerization
-    - Docker
-    - Docker Compose
-    - Docker Registry
-    # Orchestration
-    - Kubernetes
-    - Helm
-    - Container Orchestration
-    # Cloud Platforms
-    - AWS
-    - Google Cloud
-    - Azure Basics
-    # Infrastructure as Code
-    - Terraform
-    - CloudFormation
-    - IaC Principles
-    # Monitoring & Logging
-    - ELK Stack
-    - Prometheus
-    - Grafana
-    - Log Aggregation
-    # Operating Systems
-    - Linux
-    - Ubuntu
-    - CentOS
-    - Shell Scripting (Bash)
-    # Networking
-    - DNS
-    - SSL/TLS
-    - Networking Basics
-    - Load Balancing
-    # Database Administration
-    - Database Backups
-    - Replication
-    - Performance Tuning
 
 capabilities:
   ai_sdd:
@@ -252,26 +81,6 @@ capabilities:
 
 Rservices:
   es:
-    - title: "Desarrollo de Software a Medida"
-      items:
-        - "Analisis de requerimientos"
-        - "Diseno de arquitecturas escalables"
-        - "Implementacion de sistemas personalizados"
-        - "Integraciones con servicios externos"
-        - "Mantenimiento y evolucion de plataformas"
-    - title: "Desarrollo de Aplicaciones Moviles"
-      items:
-        - "Apps para Android, iOS y Web"
-        - "Aplicaciones empresariales"
-        - "Plataformas educativas"
-        - "Sistemas internos corporativos"
-        - "Integracion con backend y APIs"
-    - title: "Desarrollo de Backend"
-      items:
-        - "Creacion de backends desde cero"
-        - "Migracion de sistemas legacy"
-        - "Optimizacion de rendimiento"
-        - "Integraciones seguras"
     - title: "Desarrollo de Aplicaciones Interactivas"
       items:
         - "Juegos 2D y 3D"
@@ -287,33 +96,7 @@ Rservices:
         - "Aplicaciones educativas en VR/AR"
         - "Apps de entrenamiento"
         - "Visualizaciones 3D interactivas"
-    - title: "Consultoria y Arquitectura de Software"
-      items: []
-    - title: "Automatizaciones"
-      items:
-        - "Pruebas automatizadas"
-        - "Flujos automatizados"
   en:
-    - title: "Custom Software Development"
-      items:
-        - "Requirements analysis"
-        - "Scalable architecture design"
-        - "Custom system implementation"
-        - "Third-party integrations"
-        - "Platform maintenance and evolution"
-    - title: "Mobile App Development"
-      items:
-        - "Android, iOS and Web apps"
-        - "Enterprise applications"
-        - "Educational platforms"
-        - "Internal corporate systems"
-        - "Backend and API integration"
-    - title: "Backend Development"
-      items:
-        - "Backend creation from scratch"
-        - "Legacy system migration"
-        - "Performance optimization"
-        - "Secure integrations"
     - title: "Interactive Application Development"
       items:
         - "2D and 3D games"
@@ -329,81 +112,55 @@ Rservices:
         - "Educational VR/AR applications"
         - "Training apps"
         - "Interactive 3D visualizations"
-    - title: "Software Consulting and Architecture"
-      items: []
-    - title: "Automations"
-      items:
-        - "Automated testing"
-        - "Automated workflows"
 
 experience:
-  - company: Choucair Testing
+  - company: Bellseboss Studio
     period:
-      es: "Enero 2025 – Presente"
-      en: "January 2025 – Present"
-    roles: [backend, qa]
+      es: "Enero 2024 – Presente"
+      en: "January 2024 – Present"
+    roles: [gamedev]
     achievements:
       es:
-        - Desarrollé APIs en Java, JavaScript, Python y Go
-        - Construí suites de testing automatizado con Playwright y Karate
-        - Integré QA en pipelines de CI/CD
+        - Desarrollando juegos indie en Unity con C# para múltiples plataformas
+        - Creando experiencias interactivas 2D y 3D desde concepto hasta publicación
+        - Publicando y manteniendo proyectos en Itch.io con integración CI/CD
       en:
-        - Developed APIs in Java, JavaScript, Python and Go
-        - Built automated test suites with Playwright and Karate
-        - Integrated QA into CI/CD pipelines
+        - Developing indie games in Unity with C# for multiple platforms
+        - Creating 2D and 3D interactive experiences from concept to release
+        - Publishing and maintaining projects on Itch.io with CI/CD integration
       
-      backend:
+      gamedev:
         es:
-          - Diseñé y desarrollé APIs RESTful escalables en Java, Python, JavaScript y Go
-          - Implementé arquitectura de microservicios con patrones de diseño SOLID
-          - Optimicé rendimiento de APIs reduciendo tiempos de respuesta en 30%
-          - Integré servicios backend en pipelines de CI/CD con GitHub Actions
+          - Desarrollo de prototipos y juegos completos en Unity con C#
+          - Implementación de mecánicas de juego, sistemas de combate y progresión
+          - Diseño y balanceo de gameplay para experiencias single-player
+          - Configuración de pipelines CI/CD con GitHub Actions para builds automáticos
+          - Publicación automatizada en Itch.io mediante Itch.io Butler
+          - Optimización de rendimiento para PC, WebGL y dispositivos móviles
         en:
-          - Designed and developed scalable RESTful APIs in Java, Python, JavaScript and Go
-          - Implemented microservices architecture with SOLID design patterns
-          - Optimized API performance reducing response times by 30%
-          - Integrated backend services into CI/CD pipelines with GitHub Actions
-      
-      qa:
-        es:
-          - Desarrollé frameworks de testing automatizado con Playwright y Karate
-          - Implementé estrategias de testing end-to-end y de integración
-          - Integré testing automatizado en pipelines de CI/CD
-          - Reduje bugs en producción en 40% mediante testing proactivo
-        en:
-          - Developed automated testing frameworks with Playwright and Karate
-          - Implemented end-to-end and integration testing strategies
-          - Integrated automated testing into CI/CD pipelines
-          - Reduced production bugs by 40% through proactive testing
+          - Development of prototypes and complete games in Unity with C#
+          - Implementation of game mechanics, combat systems, and progression
+          - Gameplay design and balancing for single-player experiences
+          - CI/CD pipeline setup with GitHub Actions for automated builds
+          - Automated publishing to Itch.io via Itch.io Butler
+          - Performance optimization for PC, WebGL, and mobile devices
 
   - company: SweetRush
     period:
       es: "Mayo 2022 – Junio 2024"
       en: "May 2022 – June 2024"
-    roles: [backend, gamedev, qa]
+    roles: [gamedev]
     achievements:
       es:
-        - Construí microservicios en la nube en Java, Go y Node.js en AWS
-        - Diseñé e implementé APIs REST para plataformas VR y AR
-        - Desarrollé aplicaciones VR y AR usando Unity y Oculus SDK
-        - Integré pipelines de testing automatizado para servicios backend
+        - Desarrollé apps VR/AR con Unity + Oculus SDK para educación
+        - Implementé interacción 3D y física para simulación inmersiva
+        - Optimicé rendimiento gráfico a 90 FPS constantes en VR
+        - Integré APIs backend con Unity para experiencias multiplataforma
       en:
-        - Built cloud-based microservices in Java, Go and Node.js on AWS
-        - Designed and implemented REST APIs for VR and AR platforms
-        - Developed VR and AR applications using Unity and Oculus SDK
-        - Integrated automated testing pipelines for backend services
-      
-      backend:
-        es:
-          - Diseñé arquitectura de microservicios cloud-native en AWS con Java, Go y Node.js
-          - Implementé APIs RESTful de alto rendimiento para plataformas VR/AR educativas
-          - Desarrollé servicios backend escalables manejando 10K+ usuarios concurrentes
-          - Integré AWS Lambda, EC2, S3 y RDS para soluciones serverless y escalables
-        en:
-          - Designed cloud-native microservices architecture on AWS with Java, Go and Node.js
-          - Implemented high-performance RESTful APIs for educational VR/AR platforms
-          - Developed scalable backend services handling 10K+ concurrent users
-          - Integrated AWS Lambda, EC2, S3 and RDS for serverless and scalable solutions
+        - Developed VR/AR apps with Unity + Oculus SDK for education
+        - Implemented 3D interaction and physics for immersive simulation
+        - Optimized graphics to constant 90 FPS in VR
+        - Integrated backend APIs with Unity for cross-platform experiences
       
       gamedev:
         es:
@@ -416,80 +173,19 @@ experience:
           - Implemented 3D interaction systems and physics for educational experiences
           - Optimized graphics performance achieving constant 90 FPS in VR
           - Integrated backend APIs with Unity for cross-platform experiences
-      
-      qa:
-        es:
-          - Diseñé estrategias de testing automatizado para microservicios backend
-          - Implementé pipelines de CI/CD con testing automatizado end-to-end
-          - Desarrollé suites de pruebas de integración y rendimiento
-          - Reduje tiempo de deployment en 50% mediante automatización de QA
-        en:
-          - Designed automated testing strategies for backend microservices
-          - Implemented CI/CD pipelines with end-to-end automated testing
-          - Developed integration and performance test suites
-          - Reduced deployment time by 50% through QA automation
-
-  - company: Banco de Bogotá
-    period:
-      es: "Enero 2018 – Abril 2022"
-      en: "January 2018 – April 2022"
-    roles: [backend, qa]
-    achievements:
-      es:
-        - Desarrollé microservicios Java y APIs REST para sistemas financieros
-        - Lideré migraciones de pipelines CI/CD
-        - Integré testing automatizado basado en Selenium
-      en:
-        - Developed Java microservices and REST APIs for financial systems
-        - Led CI/CD pipeline migrations
-        - Integrated Selenium-based automated testing
-      
-      backend:
-        es:
-          - Desarrollé microservicios Java con Spring Boot para sistemas bancarios críticos
-          - Diseñé APIs REST seguras manejando transacciones financieras con alta disponibilidad
-          - Implementé arquitectura de microservicios reduciendo acoplamiento en 60%
-          - Lideré migración de sistemas legacy a arquitectura moderna cloud-ready
-        en:
-          - Developed Java microservices with Spring Boot for critical banking systems
-          - Designed secure REST APIs handling financial transactions with high availability
-          - Implemented microservices architecture reducing coupling by 60%
-          - Led migration from legacy systems to modern cloud-ready architecture
-      
-      qa:
-        es:
-          - Implementé frameworks de testing automatizado con Selenium y JUnit
-          - Diseñé estrategias de testing para garantizar seguridad en transacciones financieras
-          - Lideré migraciones de pipelines CI/CD integrando testing automatizado
-          - Reduje defectos en producción en 70% mediante testing riguroso
-        en:
-          - Implemented automated testing frameworks with Selenium and JUnit
-          - Designed testing strategies to ensure security in financial transactions
-          - Led CI/CD pipeline migrations integrating automated testing
-          - Reduced production defects by 70% through rigorous testing
 
   - company: Convexa Media
     period:
       es: "Enero 2022 – Diciembre 2022"
       en: "January 2022 – December 2022"
-    roles: [backend, gamedev]
+    roles: [gamedev]
     achievements:
       es:
-        - Desarrollé APIs backend en Java y JavaScript
-        - Construí aplicaciones AR basadas en Unity para experiencias interactivas
+        - Desarrollé apps AR con Unity para experiencias de marca interactivas
+        - Implementé sistemas de tracking y reconocimiento en AR
       en:
-        - Developed backend APIs in Java and JavaScript
-        - Built Unity-based AR applications for interactive experiences
-      
-      backend:
-        es:
-          - Desarrollé APIs RESTful en Java y JavaScript para aplicaciones multimedia
-          - Implementé servicios backend escalables para contenido interactivo
-          - Integré bases de datos y sistemas de autenticación seguros
-        en:
-          - Developed RESTful APIs in Java and JavaScript for multimedia applications
-          - Implemented scalable backend services for interactive content
-          - Integrated databases and secure authentication systems
+        - Developed AR apps with Unity for interactive brand experiences
+        - Implemented tracking and object recognition in AR
       
       gamedev:
         es:
@@ -525,36 +221,6 @@ experience:
           - Implemented physics, animation and UI systems for interactive experiences
           - Fixed critical bugs improving stability by 80%
           - Developed new features based on user feedback
-  - company: Meditel S.A.S.
-    period:
-      es: "Enero 2016 – Diciembre 2017"
-      en: "January 2016 – December 2017"
-    roles: [backend, qa]
-    achievements:
-      es:
-        - Lideré el proyecto de creacion de la plataforma de telemedicina con Laravel.
-        - Desarrollé framework de testing unitario con PHPUnit para backend Laravel.
-      en:
-        - Led the project of creating a telemedicine platform with Laravel.
-        - Developed unit testing framework with PHPUnit for Laravel backend.
-      
-      backend:
-        es:
-          - Desarrollé y mantuve APIs RESTful en Laravel con arquitectura MVC y Service Layer
-          - Implementé testing unitario con PHPUnit siguiendo principios TDD
-        en:
-          - Developed and maintained RESTful APIs in Laravel with MVC and Service Layer architecture
-          - Implemented unit testing with PHPUnit following TDD principles
-      
-      qa:
-        es:
-          - Diseñé e implementé estrategia integral de testing automatizado (unitario, integración, E2E) para stack Laravel.
-          - Desarrollé suites de testing E2E con Playwright cubriendo flujos críticos de negocio
-          - Implementé pipelines CI/CD con GitHub Actions: paralelización, reporting.
-        en:
-          - Designed and implemented comprehensive automated testing strategy (unit, integration, E2E) for Laravel stack.
-          - Developed E2E testing suites with Playwright covering critical business flows
-          - Implemented CI/CD pipelines with GitHub Actions: parallelization, reporting.
 
 
 projects:
@@ -587,16 +253,6 @@ projects:
       es: "Desarrollador principal, diseño y programación de experiencia interactiva, diseño de funcionalidades."
       en: "Lead developer, designing and programming of interactive experience, functionality design."
     link: "https://play.google.com/store/apps/details?id=com.InstitutoHumboldt.Colombian_Paramo_RA&hl=es_CO&gl=US"
-
-  - name:
-      es: "500 Preguntas"
-      en: "500 Preguntas"
-    type: "Backend / Frontend Development"
-    technologies: [Firebase, TypeScript, React, Firestore, Cloud Functions, Authentication]
-    description:
-      es: "Desarrollé toda la arquitectura backend en Firebase con Cloud Functions serverless, Firestore, Authentication e índices para optimizar la lectura de datos. También construí el portal administrativo en ReactJS usando el SDK de Firebase para administrar la plataforma."
-      en: "I developed the full backend architecture in Firebase with serverless Cloud Functions, Firestore, Authentication and indexes to optimize data reads. I also built the administrative portal in ReactJS using the Firebase SDK to manage the platform."
-    link: "https://play.google.com/store/apps/details?id=com.insotools.preguntas500"
 
 talks:
   - title:
@@ -635,11 +291,6 @@ talks:
     link: "https://peryloth.com/CERTIFICADO_ING_SISTEMAS_OCTUBRE_2022-01-LPLATA.jpg"
 
 certifications:
-  - name: "Bootcamp Backend Java"
-    issuer: "Pragma"
-    date: "2025"
-    link: null
-
   - name: "Game Development with Unity"
     issuer: "NaskaDigital"
     date: "2020"
