@@ -5,12 +5,14 @@ personal:
   email: luisplata@gmail.com
   phone: "+57 3015086264"
   photo_url: https://luisplata.github.io/images/Profile.jpg
+  total_games_itchio: 26
 
 links:
   portfolio: https://luisplata.github.io
   github: https://github.com/luisplata
   linkedin: https://www.linkedin.com/in/luisenriqueplataosorio
   itch: https://peryloth.itch.io
+  studio: https://bellseboss-studio.github.io
 
 skills:
   gamedev:
@@ -121,27 +123,27 @@ experience:
     roles: [gamedev]
     achievements:
       es:
-        - Desarrollando juegos indie en Unity con C# para múltiples plataformas
-        - Creando experiencias interactivas 2D y 3D desde concepto hasta publicación
-        - Publicando y manteniendo proyectos en Itch.io con integración CI/CD
+        - Creador y colaborador en Bellseboss Studio, haciendo juegos indie para ganar experiencia real con un equipo de desarrollo real
+        - Desarrollando juegos en Unity con C# desde concepto hasta publicación en múltiples plataformas
+        - Publicando y manteniendo proyectos en Itch.io con integración CI/CD automatizada
       en:
-        - Developing indie games in Unity with C# for multiple platforms
-        - Creating 2D and 3D interactive experiences from concept to release
-        - Publishing and maintaining projects on Itch.io with CI/CD integration
+        - Creator and collaborator at Bellseboss Studio, making indie games to gain real experience with a real dev team
+        - Developing Unity games with C# from concept to release on multiple platforms
+        - Publishing and maintaining projects on Itch.io with automated CI/CD integration
       
       gamedev:
         es:
-          - Desarrollo de prototipos y juegos completos en Unity con C#
-          - Implementación de mecánicas de juego, sistemas de combate y progresión
-          - Diseño y balanceo de gameplay para experiencias single-player
-          - Configuración de pipelines CI/CD con GitHub Actions para builds automáticos
+          - Desarrollo de prototipos y juegos completos en Unity con C# como creador y colaborador en Bellseboss Studio
+          - Implementación de mecánicas de juego, sistemas de combate y progresión para beat 'em ups y action games
+          - Diseño y balanceo de gameplay para experiencias single-player con variedad de géneros
+          - Configuración de pipelines CI/CD con GitHub Actions para builds automáticos multiplataforma
           - Publicación automatizada en Itch.io mediante Itch.io Butler
           - Optimización de rendimiento para PC, WebGL y dispositivos móviles
         en:
-          - Development of prototypes and complete games in Unity with C#
-          - Implementation of game mechanics, combat systems, and progression
-          - Gameplay design and balancing for single-player experiences
-          - CI/CD pipeline setup with GitHub Actions for automated builds
+          - Development of prototypes and complete games in Unity with C# as creator and collaborator at Bellseboss Studio
+          - Implementation of game mechanics, combat systems, and progression for beat 'em ups and action games
+          - Gameplay design and balancing for single-player experiences across multiple genres
+          - CI/CD pipeline setup with GitHub Actions for automated cross-platform builds
           - Automated publishing to Itch.io via Itch.io Butler
           - Performance optimization for PC, WebGL, and mobile devices
 
@@ -225,13 +227,13 @@ experience:
 
 projects:
   - name:
-      es: "ANA – Memory of the Void"
-      en: "ANA – Memory of the Void"
-    type: "Indie Game / Singleplayer Prototype"
+      es: "A.N.A. — The Broken Link"
+      en: "A.N.A. — The Broken Link"
+    type: "Indie Game / Beat 'em Up"
     technologies: [Unity, C#, GitHub Actions, itch.io Butler]
     description:
-      es: "Prototipo singleplayer en Unity con enfoque en gameplay, progresión y balance. Desarrollé mecánicas del jugador y comportamientos de enemigos. Configuré CI/CD para generar builds y publicar automáticamente en itch.io."
-      en: "Single-player Unity prototype focused on gameplay, progression, and balance. I developed player mechanics and enemy behaviors. I set up CI/CD to build and automatically publish releases to itch.io."
+      es: "Beat 'em up 2.5D narrativo — inspirado en anime, cyberpunk y estética synthwave. Desarrollé mecánicas del jugador, comportamientos de enemigos y pipeline CI/CD para builds automáticos."
+      en: "2.5D narrative beat 'em up — inspired by anime, cyberpunk, and synthwave aesthetics. I developed player mechanics, enemy behaviors, and CI/CD pipeline for automated builds."
     link: "https://luisfmp.itch.io/ana"
 
   - name:

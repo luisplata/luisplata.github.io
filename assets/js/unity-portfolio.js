@@ -44,7 +44,7 @@ const copy = {
     primaryCta: "Trabajemos juntos",
     secondaryCta: "Ver proyectos",
     years: "Años de experiencia",
-    projects: "Proyectos Unity",
+    projects: "Proyectos Unity publicados",
     games: "Juegos",
     tech: "Tecnologías",
     tags: [
@@ -95,7 +95,7 @@ const copy = {
     primaryCta: "Let's work together",
     secondaryCta: "See projects",
     years: "Years of experience",
-    projects: "Unity Projects",
+    projects: "Published Unity Projects",
     games: "Games",
     tech: "Technologies",
     tags: [
@@ -233,24 +233,6 @@ function countSkills(skills) {
   return new Set(all).size;
 }
 
-function extractImpactSignals(experience) {
-  const raw = (experience || [])
-    .flatMap((item) => [
-      ...(item?.achievements?.es || []),
-      ...(item?.achievements?.en || []),
-      ...(item?.gamedev?.es || []),
-      ...(item?.gamedev?.en || []),
-    ])
-    .join(" ");
-
-  const percentageMatches = [...new Set((raw.match(/\d+%/g) || []).slice(0, 4))];
-  const scaleMatches = [...new Set((raw.match(/\d+K\+/gi) || []).slice(0, 2))];
-
-  const values = [...percentageMatches, ...scaleMatches];
-  if (!values.length) return ["60%", "80%", "90%"];
-  return values;
-}
-
 function getRoleFitScores(data) {
   const gamedev = data?.skills?.gamedev || [];
   const score = Math.min(99, 80 + Math.round(gamedev.length / 1.5));
@@ -283,7 +265,7 @@ function buildHero() {
 
   const totalYears = computeOverallYears(state.data);
   const skillCount = countSkills(skills);
-  const gamesCount = projects.length;
+  const gamesCount = personal.total_games_itchio || projects.length;
 
   const tags = copy[state.lang].tags || [];
   el.heroTags.innerHTML = tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("");
@@ -302,17 +284,11 @@ function buildHero() {
 }
 
 function buildProof() {
+  const personal = state.data?.personal || {};
   const experience = state.data?.experience || [];
   const years = computeOverallYears(state.data);
   const techCount = countSkills(state.data?.skills || {});
   const projects = state.data?.projects || [];
-  const impactSignals = extractImpactSignals(experience);
-
-  const signalCards = impactSignals.slice(0, 4).map((signal) => `
-    <article class="metric-card reveal">
-      <span class="metric-value">${escapeHtml(signal)}</span>
-      <span class="metric-label">Impacto</span>
-    </article>`);
 
   const roleFitCards = getRoleFitScores(state.data)
     .map(
@@ -332,9 +308,8 @@ function buildProof() {
     <div class="proof-grid">
       <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(years))}+</span><span class="metric-label">${escapeHtml(tx("years"))}</span></article>
       <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(projects.length))}</span><span class="metric-label">${escapeHtml(tx("projects"))}</span></article>
-      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(projects.length))}</span><span class="metric-label">${escapeHtml(tx("games"))}</span></article>
+      <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(personal.total_games_itchio || projects.length))}</span><span class="metric-label">${escapeHtml(tx("games"))}</span></article>
       <article class="metric-card reveal"><span class="metric-value">${escapeHtml(String(techCount))}+</span><span class="metric-label">${escapeHtml(tx("tech"))}</span></article>
-      ${signalCards.join("")}
     </div>
     <div class="metric-panel reveal">
       <p>${escapeHtml(tx("proofQuote"))}</p>
@@ -511,6 +486,7 @@ async function init() {
     setupEvents();
     renderAll();
   } catch (_error) {
+    console.error("Init error:", _error);
     [el.proof, el.services, el.experience, el.projects, el.recognition, el.contact].forEach((container) => {
       container.innerHTML = "";
     });
