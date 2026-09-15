@@ -166,24 +166,7 @@
     }
 
     .qr-container {
-      position: relative;
       display: inline-block;
-    }
-
-    /* El logo visual en la vista previa */
-    .qr-logo-preview {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 22%; 
-      height: auto;
-      background-color: #ffffff;
-      padding: 5px;
-      border-radius: 12px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      pointer-events: none;
-      display: none; /* Se muestra solo si hay logo */
     }
 
     #qrcode {
@@ -204,6 +187,58 @@
       display: flex;
       gap: 10px;
       justify-content: center;
+    }
+
+    .logo-tools {
+      margin-top: 1rem;
+      border: 1px solid #bfd3ff;
+      border-radius: 14px;
+      padding: 0.9rem 1rem 1rem;
+      background: #f6f9ff;
+    }
+
+    .logo-tools legend {
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0 0.4rem;
+    }
+
+    .logo-tools label {
+      display: grid;
+      gap: 0.3rem;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 0.7rem;
+    }
+
+    .logo-tools output {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .logo-tools input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+    }
+
+    .logo-tools .check-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-tools .check-row input {
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: var(--primary);
+    }
+
+    .link-btn {
+      background: none;
+      color: var(--primary);
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+      text-decoration: underline;
     }
 
     @media (max-width: 560px) {
@@ -246,64 +281,109 @@
 
     <p id="logoStatus" role="status" aria-live="polite" style="font-size:0.9rem;color:var(--muted);margin:0.6rem 0 0;"></p>
 
+    <fieldset id="logoTools" class="logo-tools" hidden>
+      <legend>Herramientas del logo</legend>
+      <label for="logoSize">Tamaño del logo: <output id="logoSizeVal" for="logoSize">40%</output>
+        <input type="range" id="logoSize" min="0.2" max="0.5" step="0.05" value="0.4" aria-describedby="logoSizeVal">
+      </label>
+      <label for="logoMargin">Margen alrededor: <output id="logoMarginVal" for="logoMargin">8px</output>
+        <input type="range" id="logoMargin" min="0" max="20" step="1" value="8" aria-describedby="logoMarginVal">
+      </label>
+      <label class="check-row" for="hideDots">
+        <input type="checkbox" id="hideDots" checked>
+        Ocultar puntos detrás del logo (más legible)
+      </label>
+      <button type="button" id="removeLogoBtn" class="link-btn">Quitar logo</button>
+    </fieldset>
+
     <section class="qr-wrap" aria-live="polite">
       <p id="placeholder">Aquí aparecerá tu código QR</p>
       
       <div class="qr-container" id="qr-container" style="display: none;">
         <div id="qrcode"></div>
-        <!-- Esta imagen solo es para la vista previa en pantalla -->
-        <img id="logoPreview" src="" alt="Logo" class="qr-logo-preview">
       </div>
     </section>
 
-    <!-- Botón para descargar la imagen final -->
+    <!-- Botones para descargar la imagen final -->
     <div class="action-buttons">
       <button type="button" id="downloadBtn" style="display: none;">⬇️ Descargar QR (PNG)</button>
+      <button type="button" id="downloadSvgBtn" style="display: none;">⬇️ SVG</button>
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <!-- Librería vendorizada: qr-code-styling v1.9.1 (sin dependencia de CDN) -->
+  <script src="./vendor/qr-code-styling.js"></script>
   <script>
-    // Fallback si jsdelivr falla: intenta con unpkg y cdnjs
-    (function ensureQRCodeLib() {
-      if (typeof QRCode !== 'undefined') return;
-      var fallbacks = [
-        'https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'
-      ];
-      var i = 0;
-      function loadNext() {
-        if (typeof QRCode !== 'undefined' || i >= fallbacks.length) return;
-        var s = document.createElement('script');
-        s.src = fallbacks[i++];
-        s.onload = function () { /* listo */ };
-        s.onerror = loadNext;
-        document.head.appendChild(s);
-      }
-      loadNext();
-    })();
-  </script>
-  <script>
-    let uploadedLogo = null; // Aquí guardaremos la imagen cargada
+    let logoDataUrl = ''; // DataURL del logo (la lib lo compone sin deformar)
+    let qrCode = null;
+    let currentData = '';
     const MAX_LOGO_BYTES = 2 * 1024 * 1024; // 2 MB
+    const QR_SIZE = 300;
 
     function setLogoStatus(msg) {
       document.getElementById('logoStatus').textContent = msg;
     }
 
     function clearLogo(showMessage) {
-      uploadedLogo = null;
-      const preview = document.getElementById('logoPreview');
-      preview.style.display = 'none';
-      preview.removeAttribute('src');
+      logoDataUrl = '';
       document.getElementById('logoInput').value = '';
+      document.getElementById('logoTools').hidden = true;
       if (showMessage) setLogoStatus('');
+      if (qrCode && currentData) {
+        qrCode.update({ image: '' });
+      }
     }
 
-    // 1. Manejar la carga de la imagen
+    function getImageOptions() {
+      return {
+        hideBackgroundDots: document.getElementById('hideDots').checked,
+        imageSize: parseFloat(document.getElementById('logoSize').value),
+        margin: parseInt(document.getElementById('logoMargin').value, 10),
+        crossOrigin: 'anonymous'
+      };
+    }
+
+    function refreshLogoOutputs() {
+      document.getElementById('logoSizeVal').textContent =
+        Math.round(parseFloat(document.getElementById('logoSize').value) * 100) + '%';
+      document.getElementById('logoMarginVal').textContent =
+        document.getElementById('logoMargin').value + 'px';
+    }
+
+    function applyImageOptions() {
+      refreshLogoOutputs();
+      if (qrCode && currentData) {
+        qrCode.update({ imageOptions: getImageOptions() });
+      }
+    }
+
+    function createQrInstance(data) {
+      qrCode = new QRCodeStyling({
+        width: QR_SIZE,
+        height: QR_SIZE,
+        type: 'canvas',
+        data: data,
+        image: logoDataUrl || '',
+        qrOptions: {
+          errorCorrectionLevel: 'H' // Nivel H: VITAL para que siga legible con logo
+        },
+        imageOptions: getImageOptions(),
+        dotsOptions: {
+          color: '#182230',
+          type: 'rounded'
+        },
+        backgroundOptions: {
+          color: '#ffffff'
+        }
+      });
+      const container = document.getElementById('qrcode');
+      container.innerHTML = '';
+      qrCode.append(container);
+    }
+
+    // 1. Manejar la carga de la imagen (se guarda como DataURL, la lib la encaja con su aspecto)
     document.getElementById('logoInput').addEventListener('change', function(e) {
       const file = e.target.files[0];
-      const preview = document.getElementById('logoPreview');
 
       if (!file) {
         clearLogo(true);
@@ -326,11 +406,13 @@
       reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
-          uploadedLogo = img; // Guardamos la imagen lista
-          preview.src = event.target.result;
-          preview.style.display = 'block'; // Mostrar en vista previa
-          preview.alt = 'Logo: ' + file.name;
-          setLogoStatus('Logo cargado: ' + file.name + ' — clic de nuevo para cambiarlo, o genera el QR.');
+          logoDataUrl = event.target.result;
+          setLogoStatus('Logo cargado: ' + file.name + ' — ajustalo abajo, se aplica al instante si ya hay QR.');
+          document.getElementById('logoTools').hidden = false;
+          refreshLogoOutputs();
+          if (qrCode && currentData) {
+            qrCode.update({ image: logoDataUrl, imageOptions: getImageOptions() });
+          }
         };
         img.onerror = function() {
           alert('No se pudo leer esa imagen. Probá con otro archivo.');
@@ -350,29 +432,29 @@
       return value;
     }
 
+    function showEmptyState(msg, focusInput) {
+      const input = document.getElementById('linkInput');
+      if (msg) alert(msg);
+      if (focusInput) input.focus();
+      document.getElementById('placeholder').style.display = 'block';
+      document.getElementById('qr-container').style.display = 'none';
+      document.getElementById('downloadBtn').style.display = 'none';
+      document.getElementById('downloadSvgBtn').style.display = 'none';
+    }
+
     // 2. Generar el QR
     function generateQRCode() {
-      if (typeof QRCode === 'undefined') {
-        alert('La librería QR aún no cargó (sin conexión al CDN). Revisá tu conexión e intentá de nuevo.');
+      if (typeof QRCodeStyling === 'undefined') {
+        alert('No cargó la librería local (qr/vendor/qr-code-styling.js). Revisá que el archivo exista.');
         return;
       }
 
       const input = document.getElementById('linkInput');
       const rawLink = input.value;
       const link = normalizeUrl(rawLink);
-      const qrContainer = document.getElementById('qrcode');
-      const placeholder = document.getElementById('placeholder');
-      const qrWrapper = document.getElementById('qr-container');
-      const downloadBtn = document.getElementById('downloadBtn');
-
-      qrContainer.innerHTML = ''; // Limpiar QR anterior
 
       if (!rawLink.trim()) {
-        alert('Por favor, escribe un enlace válido.');
-        input.focus();
-        placeholder.style.display = 'block';
-        qrWrapper.style.display = 'none';
-        downloadBtn.style.display = 'none';
+        showEmptyState('Por favor, escribe un enlace válido.', true);
         return;
       }
 
@@ -383,119 +465,31 @@
         }
         input.value = link; // muestra la URL normalizada
       } catch (err) {
-        alert('Ese enlace no parece válido. Ejemplo: https://example.com');
-        input.focus();
-        placeholder.style.display = 'block';
-        qrWrapper.style.display = 'none';
-        downloadBtn.style.display = 'none';
+        showEmptyState('Ese enlace no parece válido. Ejemplo: https://example.com', true);
         return;
       }
 
-      placeholder.style.display = 'none';
-      qrWrapper.style.display = 'inline-block';
-      downloadBtn.style.display = 'inline-block';
-
       try {
-        new QRCode(qrContainer, {
-          text: link,
-          width: 300,
-          height: 300,
-          correctLevel: QRCode.CorrectLevel.H // Nivel H es VITAL para que funcione con el logo encima
-        });
+        currentData = link;
+        createQrInstance(link);
       } catch (err) {
-        alert('El texto es demasiado largo para generar un QR. Probá con un enlace más corto.');
-        placeholder.style.display = 'block';
-        qrWrapper.style.display = 'none';
-        downloadBtn.style.display = 'none';
+        showEmptyState('El texto es demasiado largo para generar un QR. Probá con un enlace más corto.', false);
+        return;
       }
+
+      document.getElementById('placeholder').style.display = 'none';
+      document.getElementById('qr-container').style.display = 'inline-block';
+      document.getElementById('downloadBtn').style.display = 'inline-block';
+      document.getElementById('downloadSvgBtn').style.display = 'inline-block';
     }
 
-    // 3. Función para dibujar el logo y el QR juntos y descargarlo
-    function downloadQR() {
-      const qrCanvas = document.querySelector('#qrcode canvas');
-      const qrImg = document.querySelector('#qrcode img');
-      if (!qrCanvas && !qrImg) return alert('Primero genera un código QR.');
-
-      // Creamos un nuevo canvas para la imagen final
-      const finalCanvas = document.createElement('canvas');
-      const ctx = finalCanvas.getContext('2d');
-
-      const drawFinal = function(qrSource, size) {
-        const padding = 20; // Margen blanco alrededor del QR final
-
-        finalCanvas.width = size + (padding * 2);
-        finalCanvas.height = size + (padding * 2);
-
-        // Fondo blanco general
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-
-        // Dibujamos el QR en el centro
-        ctx.drawImage(qrSource, padding, padding, size, size);
-
-        // Si hay un logo subido, lo dibujamos encima SIN deformarlo (contain)
-        if (uploadedLogo) {
-          const maxLogo = size * 0.22; // El logo ocupa como máximo el 22% del QR
-          const aspect = uploadedLogo.naturalWidth / uploadedLogo.naturalHeight;
-          let logoW = maxLogo;
-          let logoH = maxLogo;
-          if (aspect > 1) {
-            logoH = maxLogo / aspect; // apaisado
-          } else if (aspect < 1) {
-            logoW = maxLogo * aspect; // vertical
-          }
-          const logoX = padding + (size - logoW) / 2;
-          const logoY = padding + (size - logoH) / 2;
-
-          // Dibujamos un fondo blanco redondeado detrás del logo para que se vea limpio
-          const bgPadding = 6;
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          // Función para dibujar rectángulo redondeado
-          const rx = logoX - bgPadding;
-          const ry = logoY - bgPadding;
-          const rw = logoW + (bgPadding * 2);
-          const rh = logoH + (bgPadding * 2);
-          const radius = 12;
-
-          ctx.moveTo(rx + radius, ry);
-          ctx.lineTo(rx + rw - radius, ry);
-          ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + radius);
-          ctx.lineTo(rx + rw, ry + rh - radius);
-          ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - radius, ry + rh);
-          ctx.lineTo(rx + radius, ry + rh);
-          ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - radius);
-          ctx.lineTo(rx, ry + radius);
-          ctx.quadraticCurveTo(rx, ry, rx + radius, ry);
-          ctx.closePath();
-          ctx.fill();
-
-          // Dibujamos el logo encima del fondo blanco
-          ctx.drawImage(uploadedLogo, logoX, logoY, logoW, logoH);
-        }
-
-        // Convertimos el canvas a una imagen PNG y forzamos la descarga
-        const link = document.createElement('a');
-        link.download = 'mi-codigo-qr-personalizado.png';
-        link.href = finalCanvas.toDataURL('image/png');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      };
-
-      if (qrCanvas) {
-        drawFinal(qrCanvas, qrCanvas.width);
-      } else {
-        // Fallback: qrcodejs puede renderizar <img> en vez de <canvas>
-        const fallbackImg = new Image();
-        fallbackImg.onload = function() {
-          drawFinal(fallbackImg, 300);
-        };
-        fallbackImg.onerror = function() {
-          alert('No se pudo leer el QR para descargarlo. Intentá generar de nuevo.');
-        };
-        fallbackImg.src = qrImg.src;
-      }
+    // 3. Descarga directa con la librería (ya incluye el logo compuesto)
+    function downloadQR(extension) {
+      if (!qrCode || !currentData) return alert('Primero genera un código QR.');
+      qrCode.download({ name: 'mi-codigo-qr-personalizado', extension: extension || 'png' })
+        .catch(function() {
+          alert('No se pudo descargar el QR. Intentá generar de nuevo.');
+        });
     }
 
     // Permitir presionar "Enter" en el input
@@ -506,7 +500,16 @@
     });
 
     document.getElementById('generateBtn').addEventListener('click', generateQRCode);
-    document.getElementById('downloadBtn').addEventListener('click', downloadQR);
+    document.getElementById('downloadBtn').addEventListener('click', function() { downloadQR('png'); });
+    document.getElementById('downloadSvgBtn').addEventListener('click', function() { downloadQR('svg'); });
+    document.getElementById('logoSize').addEventListener('input', applyImageOptions);
+    document.getElementById('logoMargin').addEventListener('input', applyImageOptions);
+    document.getElementById('hideDots').addEventListener('change', applyImageOptions);
+    document.getElementById('removeLogoBtn').addEventListener('click', function() {
+      clearLogo(true);
+      setLogoStatus('Logo quitado. Podés subir otro si querés.');
+    });
+    refreshLogoOutputs();
   </script>
 
 </body>
