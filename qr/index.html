@@ -305,7 +305,11 @@
     </section>
 
     <!-- Botones para descargar la imagen final -->
-    <div class="action-buttons">
+    <div class="action-buttons" style="flex-wrap: wrap;">
+      <label for="fileName" style="flex: 1 1 100%; font-size: 0.9rem; color: var(--muted); text-align: left;">Nombre del archivo:
+        <input type="text" id="fileName" value="mi-codigo-qr" maxlength="60" autocomplete="off"
+          style="display: block; width: 100%; margin-top: 0.3rem; border-radius: 12px; border: 1px solid #bfd3ff; padding: 0.7rem 0.9rem; font-size: 1rem; color: var(--text); background: #fbfdff; outline: none;">
+      </label>
       <button type="button" id="downloadBtn" style="display: none;">⬇️ Descargar QR (PNG)</button>
       <button type="button" id="downloadSvgBtn" style="display: none;">⬇️ SVG</button>
     </div>
@@ -484,9 +488,15 @@
     }
 
     // 3. Descarga directa con la librería (ya incluye el logo compuesto)
+    function getFileName() {
+      const raw = document.getElementById('fileName').value.trim() || 'mi-codigo-qr';
+      // Saneamos: sin extensión, sin caracteres inválidos para archivos
+      return raw.replace(/\.[a-z0-9]+$/i, '').replace(/[\\/:*?"<>|]/g, '').trim() || 'mi-codigo-qr';
+    }
+
     function downloadQR(extension) {
       if (!qrCode || !currentData) return alert('Primero genera un código QR.');
-      qrCode.download({ name: 'mi-codigo-qr-personalizado', extension: extension || 'png' })
+      qrCode.download({ name: getFileName(), extension: extension || 'png' })
         .catch(function() {
           alert('No se pudo descargar el QR. Intentá generar de nuevo.');
         });
