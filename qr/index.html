@@ -366,6 +366,29 @@
         <input type="checkbox" id="hideDots" checked>
         Ocultar puntos detrás del logo (más legible)
       </label>
+      <label class="check-row" for="useLogoShadow">
+        <input type="checkbox" id="useLogoShadow">
+        Sombra en el logo
+      </label>
+      <div id="logoShadowRow" hidden>
+        <div class="row-2">
+          <label for="logoShadowColor">Color de sombra:
+            <input type="color" id="logoShadowColor" value="#000000">
+          </label>
+          <label for="logoShadowAngle">Ángulo: <output id="logoShadowAngleVal" for="logoShadowAngle">45°</output>
+            <input type="range" id="logoShadowAngle" min="0" max="360" step="5" value="45">
+          </label>
+        </div>
+        <div class="row-2">
+          <label for="logoShadowDist">Distancia: <output id="logoShadowDistVal" for="logoShadowDist">4px</output>
+            <input type="range" id="logoShadowDist" min="0" max="20" step="1" value="4">
+          </label>
+          <label for="logoShadowBlur">Grosor: <output id="logoShadowBlurVal" for="logoShadowBlur">8px</output>
+            <input type="range" id="logoShadowBlur" min="0" max="30" step="1" value="8">
+          </label>
+        </div>
+        <p class="hint">Luce en logos con transparencia (PNG). En JPG con fondo pleno, la sombra rodea el rectángulo.</p>
+      </div>
       <button type="button" id="removeLogoBtn" class="link-btn">Quitar logo</button>
     </fieldset>
 
@@ -487,6 +510,7 @@
   <script src="./vendor/qr-code-styling.js"></script>
   <script>
     let logoDataUrl = ''; // DataURL del logo (la lib lo compone sin deformar)
+    let rawLogoDataUrl = ''; // Original sin procesar: la sombra se hornea siempre desde acá
     let qrCode = null;
     let currentData = '';
     const MAX_LOGO_BYTES = 2 * 1024 * 1024; // 2 MB
@@ -498,6 +522,7 @@
 
     function clearLogo(showMessage) {
       logoDataUrl = '';
+      rawLogoDataUrl = '';
       document.getElementById('logoInput').value = '';
       document.getElementById('logoTools').hidden = true;
       if (showMessage) setLogoStatus('');
@@ -529,6 +554,69 @@
         qrCode.update({ imageOptions: getImageOptions() });
         applyShadowPreview();
       }
+    }
+
+    // ---- Sombra del logo (horneada en la imagen ANTES de la lib) ----
+    // La lib dibuja el logo tal cual se le entrega, así la sombra sale
+    // idéntica en pantalla y en la descarga PNG/SVG sin post-proceso.
+    function getLogoShadowSettings() {
+      const angle = parseInt(document.getElementById('logoShadowAngle').value, 10) * Math.PI / 180;
+      const dist = parseInt(document.getElementById('logoShadowDist').value, 10);
+      return {
+        on: document.getElementById('useLogoShadow').checked,
+        color: document.getElementById('logoShadowColor').value,
+        blur: parseInt(document.getElementById('logoShadowBlur').value, 10),
+        offsetX: Math.cos(angle) * dist,
+        offsetY: Math.sin(angle) * dist
+      };
+    }
+
+    function refreshLogoShadowOutputs() {
+      document.getElementById('logoShadowAngleVal').textContent = document.getElementById('logoShadowAngle').value + '°';
+      document.getElementById('logoShadowDistVal').textContent = document.getElementById('logoShadowDist').value + 'px';
+      document.getElementById('logoShadowBlurVal').textContent = document.getElementById('logoShadowBlur').value + 'px';
+    }
+
+    function pushLogoToQr() {
+      if (qrCode && currentData) {
+        qrCode.update({ image: logoDataUrl, imageOptions: getImageOptions() });
+        applyShadowPreview();
+      }
+    }
+
+    function processLogoImage() {
+      refreshLogoShadowOutputs();
+      if (!rawLogoDataUrl) return;
+      const sh = getLogoShadowSettings();
+      if (!sh.on) {
+        logoDataUrl = rawLogoDataUrl;
+        pushLogoToQr();
+        return;
+      }
+      const img = new Image();
+      img.onload = function() {
+        try {
+          const pad = Math.ceil(sh.blur + Math.max(Math.abs(sh.offsetX), Math.abs(sh.offsetY)) + 4);
+          const c = document.createElement('canvas');
+          c.width = img.naturalWidth + pad * 2;
+          c.height = img.naturalHeight + pad * 2;
+          const ctx = c.getContext('2d');
+          ctx.shadowColor = sh.color;
+          ctx.shadowBlur = sh.blur;
+          ctx.shadowOffsetX = sh.offsetX;
+          ctx.shadowOffsetY = sh.offsetY;
+          ctx.drawImage(img, pad, pad);
+          logoDataUrl = c.toDataURL('image/png');
+        } catch (err) {
+          logoDataUrl = rawLogoDataUrl;
+        }
+        pushLogoToQr();
+      };
+      img.onerror = function() {
+        logoDataUrl = rawLogoDataUrl;
+        pushLogoToQr();
+      };
+      img.src = rawLogoDataUrl;
     }
 
     function createQrInstance(data) {
@@ -709,14 +797,11 @@
       reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
-          logoDataUrl = event.target.result;
+          rawLogoDataUrl = event.target.result;
           setLogoStatus('Logo cargado: ' + file.name + ' — ajustalo abajo, se aplica al instante si ya hay QR.');
           document.getElementById('logoTools').hidden = false;
           refreshLogoOutputs();
-          if (qrCode && currentData) {
-            qrCode.update({ image: logoDataUrl, imageOptions: getImageOptions() });
-            applyShadowPreview();
-          }
+          processLogoImage();
         };
         img.onerror = function() {
           alert('No se pudo leer esa imagen. Probá con otro archivo.');
@@ -861,6 +946,13 @@
     document.getElementById('logoSize').addEventListener('input', applyImageOptions);
     document.getElementById('logoMargin').addEventListener('input', applyImageOptions);
     document.getElementById('hideDots').addEventListener('change', applyImageOptions);
+    document.getElementById('useLogoShadow').addEventListener('change', function() {
+      document.getElementById('logoShadowRow').hidden = !this.checked;
+      processLogoImage();
+    });
+    ['logoShadowColor', 'logoShadowAngle', 'logoShadowDist', 'logoShadowBlur'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', processLogoImage);
+    });
     document.getElementById('removeLogoBtn').addEventListener('click', function() {
       clearLogo(true);
       setLogoStatus('Logo quitado. Podés subir otro si querés.');
@@ -882,6 +974,7 @@
       applyStyleOptions();
     });
     refreshLogoOutputs();
+    refreshLogoShadowOutputs();
     refreshStyleOutputs();
     renderPaletteGrid();
   </script>
