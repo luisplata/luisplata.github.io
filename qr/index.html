@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Codigo QR</title>
+  <title>Generador de Código QR con Logo</title>
+  <meta name="description" content="Genera códigos QR desde un enlace, con logo opcional en el centro, y descargalos en PNG.">
   <style>
     :root {
       --bg-1: #f3f8ff;
@@ -61,11 +62,12 @@
       display: flex;
       gap: 0.75rem;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     #linkInput {
       flex: 1;
-      min-width: 250px;
+      min-width: 200px;
       border-radius: 12px;
       border: 1px solid #bfd3ff;
       padding: 0.85rem 0.95rem;
@@ -79,6 +81,42 @@
     #linkInput:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 4px rgba(21, 94, 239, 0.14);
+    }
+
+    /* Input de archivo accesible: label estilizado como botón */
+    .file-input-btn {
+      border: 1px solid #bfd3ff;
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: #eef4ff;
+      cursor: pointer;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .file-input-btn:hover {
+      background: #dbe8ff;
+    }
+
+    .file-input-btn:focus-visible {
+      outline: 3px solid rgba(21, 94, 239, 0.4);
+      outline-offset: 2px;
+    }
+
+    /* Input real oculto visualmente pero accesible */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     button {
@@ -103,6 +141,12 @@
       transform: translateY(0);
     }
 
+    button:disabled {
+      background: #a0b8e0;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .qr-wrap {
       margin-top: 1.35rem;
       border-radius: 16px;
@@ -112,12 +156,34 @@
       display: grid;
       place-items: center;
       padding: 1rem;
+      position: relative;
     }
 
     #placeholder {
       margin: 0;
       color: var(--muted);
       font-size: 0.95rem;
+    }
+
+    .qr-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* El logo visual en la vista previa */
+    .qr-logo-preview {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 22%; 
+      height: auto;
+      background-color: #ffffff;
+      padding: 5px;
+      border-radius: 12px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      pointer-events: none;
+      display: none; /* Se muestra solo si hay logo */
     }
 
     #qrcode {
@@ -133,6 +199,13 @@
       padding: 0.65rem;
     }
 
+    .action-buttons {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
     @media (max-width: 560px) {
       .app {
         border-radius: 18px;
@@ -141,14 +214,16 @@
 
       .form-row {
         flex-direction: column;
+        align-items: stretch;
       }
 
       #linkInput {
         min-width: 0;
       }
 
-      button {
+      button, .file-input-btn {
         width: 100%;
+        text-align: center;
       }
     }
   </style>
@@ -156,49 +231,282 @@
 <body>
 
   <main class="app">
-    <h1>Generador de Codigo QR</h1>
-    <p class="subtitle">Escribe un enlace y genera un codigo QR limpio, rapido y listo para compartir.</p>
+    <h1>Generador de Código QR</h1>
+    <p class="subtitle">Escribe un enlace, sube un logo (opcional) y descarga tu QR personalizado.</p>
 
     <div class="form-row">
-      <input type="text" id="linkInput" placeholder="https://example.com">
-      <button onclick="generateQRCode()">Generar QR</button>
+      <input type="url" id="linkInput" placeholder="https://example.com" inputmode="url" autocomplete="url" aria-label="Enlace para el código QR">
+      
+      <!-- Label accesible que dispara el input de archivo -->
+      <label class="file-input-btn" for="logoInput">📁 Subir Logo</label>
+      <input type="file" id="logoInput" class="sr-only" accept="image/*">
+
+      <button type="button" id="generateBtn">Generar QR</button>
     </div>
 
-    <section class="qr-wrap">
-      <p id="placeholder">Aqui aparecera tu codigo QR</p>
-      <div id="qrcode"></div>
+    <p id="logoStatus" role="status" aria-live="polite" style="font-size:0.9rem;color:var(--muted);margin:0.6rem 0 0;"></p>
+
+    <section class="qr-wrap" aria-live="polite">
+      <p id="placeholder">Aquí aparecerá tu código QR</p>
+      
+      <div class="qr-container" id="qr-container" style="display: none;">
+        <div id="qrcode"></div>
+        <!-- Esta imagen solo es para la vista previa en pantalla -->
+        <img id="logoPreview" src="" alt="Logo" class="qr-logo-preview">
+      </div>
     </section>
+
+    <!-- Botón para descargar la imagen final -->
+    <div class="action-buttons">
+      <button type="button" id="downloadBtn" style="display: none;">⬇️ Descargar QR (PNG)</button>
+    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
   <script>
+    // Fallback si jsdelivr falla: intenta con unpkg y cdnjs
+    (function ensureQRCodeLib() {
+      if (typeof QRCode !== 'undefined') return;
+      var fallbacks = [
+        'https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'
+      ];
+      var i = 0;
+      function loadNext() {
+        if (typeof QRCode !== 'undefined' || i >= fallbacks.length) return;
+        var s = document.createElement('script');
+        s.src = fallbacks[i++];
+        s.onload = function () { /* listo */ };
+        s.onerror = loadNext;
+        document.head.appendChild(s);
+      }
+      loadNext();
+    })();
+  </script>
+  <script>
+    let uploadedLogo = null; // Aquí guardaremos la imagen cargada
+    const MAX_LOGO_BYTES = 2 * 1024 * 1024; // 2 MB
+
+    function setLogoStatus(msg) {
+      document.getElementById('logoStatus').textContent = msg;
+    }
+
+    function clearLogo(showMessage) {
+      uploadedLogo = null;
+      const preview = document.getElementById('logoPreview');
+      preview.style.display = 'none';
+      preview.removeAttribute('src');
+      document.getElementById('logoInput').value = '';
+      if (showMessage) setLogoStatus('');
+    }
+
+    // 1. Manejar la carga de la imagen
+    document.getElementById('logoInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById('logoPreview');
+
+      if (!file) {
+        clearLogo(true);
+        return;
+      }
+
+      if (!file.type.startsWith('image/')) {
+        alert('El archivo debe ser una imagen.');
+        clearLogo(true);
+        return;
+      }
+
+      if (file.size > MAX_LOGO_BYTES) {
+        alert('La imagen es muy pesada (máx. 2 MB). Elegí una más liviana.');
+        clearLogo(true);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          uploadedLogo = img; // Guardamos la imagen lista
+          preview.src = event.target.result;
+          preview.style.display = 'block'; // Mostrar en vista previa
+          preview.alt = 'Logo: ' + file.name;
+          setLogoStatus('Logo cargado: ' + file.name + ' — clic de nuevo para cambiarlo, o genera el QR.');
+        };
+        img.onerror = function() {
+          alert('No se pudo leer esa imagen. Probá con otro archivo.');
+          clearLogo(true);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function normalizeUrl(raw) {
+      let value = raw.trim();
+      // Si parece dominio sin esquema, agregamos https://
+      if (value && !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value)) {
+        value = 'https://' + value;
+      }
+      return value;
+    }
+
+    // 2. Generar el QR
     function generateQRCode() {
-      const link = document.getElementById('linkInput').value;
+      if (typeof QRCode === 'undefined') {
+        alert('La librería QR aún no cargó (sin conexión al CDN). Revisá tu conexión e intentá de nuevo.');
+        return;
+      }
+
+      const input = document.getElementById('linkInput');
+      const rawLink = input.value;
+      const link = normalizeUrl(rawLink);
       const qrContainer = document.getElementById('qrcode');
       const placeholder = document.getElementById('placeholder');
+      const qrWrapper = document.getElementById('qr-container');
+      const downloadBtn = document.getElementById('downloadBtn');
 
-      qrContainer.innerHTML = '';
+      qrContainer.innerHTML = ''; // Limpiar QR anterior
 
-      if (!link.trim()) {
-        alert('Por favor, escribe un enlace valido.');
+      if (!rawLink.trim()) {
+        alert('Por favor, escribe un enlace válido.');
+        input.focus();
         placeholder.style.display = 'block';
+        qrWrapper.style.display = 'none';
+        downloadBtn.style.display = 'none';
+        return;
+      }
+
+      try {
+        const parsed = new URL(link);
+        if (!['http:', 'https:'].includes(parsed.protocol)) {
+          throw new Error('bad-protocol');
+        }
+        input.value = link; // muestra la URL normalizada
+      } catch (err) {
+        alert('Ese enlace no parece válido. Ejemplo: https://example.com');
+        input.focus();
+        placeholder.style.display = 'block';
+        qrWrapper.style.display = 'none';
+        downloadBtn.style.display = 'none';
         return;
       }
 
       placeholder.style.display = 'none';
+      qrWrapper.style.display = 'inline-block';
+      downloadBtn.style.display = 'inline-block';
 
-      new QRCode(qrContainer, {
-        text: link,
-        width: 256,
-        height: 256,
-      });
+      try {
+        new QRCode(qrContainer, {
+          text: link,
+          width: 300,
+          height: 300,
+          correctLevel: QRCode.CorrectLevel.H // Nivel H es VITAL para que funcione con el logo encima
+        });
+      } catch (err) {
+        alert('El texto es demasiado largo para generar un QR. Probá con un enlace más corto.');
+        placeholder.style.display = 'block';
+        qrWrapper.style.display = 'none';
+        downloadBtn.style.display = 'none';
+      }
     }
 
+    // 3. Función para dibujar el logo y el QR juntos y descargarlo
+    function downloadQR() {
+      const qrCanvas = document.querySelector('#qrcode canvas');
+      const qrImg = document.querySelector('#qrcode img');
+      if (!qrCanvas && !qrImg) return alert('Primero genera un código QR.');
+
+      // Creamos un nuevo canvas para la imagen final
+      const finalCanvas = document.createElement('canvas');
+      const ctx = finalCanvas.getContext('2d');
+
+      const drawFinal = function(qrSource, size) {
+        const padding = 20; // Margen blanco alrededor del QR final
+
+        finalCanvas.width = size + (padding * 2);
+        finalCanvas.height = size + (padding * 2);
+
+        // Fondo blanco general
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+
+        // Dibujamos el QR en el centro
+        ctx.drawImage(qrSource, padding, padding, size, size);
+
+        // Si hay un logo subido, lo dibujamos encima SIN deformarlo (contain)
+        if (uploadedLogo) {
+          const maxLogo = size * 0.22; // El logo ocupa como máximo el 22% del QR
+          const aspect = uploadedLogo.naturalWidth / uploadedLogo.naturalHeight;
+          let logoW = maxLogo;
+          let logoH = maxLogo;
+          if (aspect > 1) {
+            logoH = maxLogo / aspect; // apaisado
+          } else if (aspect < 1) {
+            logoW = maxLogo * aspect; // vertical
+          }
+          const logoX = padding + (size - logoW) / 2;
+          const logoY = padding + (size - logoH) / 2;
+
+          // Dibujamos un fondo blanco redondeado detrás del logo para que se vea limpio
+          const bgPadding = 6;
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          // Función para dibujar rectángulo redondeado
+          const rx = logoX - bgPadding;
+          const ry = logoY - bgPadding;
+          const rw = logoW + (bgPadding * 2);
+          const rh = logoH + (bgPadding * 2);
+          const radius = 12;
+
+          ctx.moveTo(rx + radius, ry);
+          ctx.lineTo(rx + rw - radius, ry);
+          ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + radius);
+          ctx.lineTo(rx + rw, ry + rh - radius);
+          ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - radius, ry + rh);
+          ctx.lineTo(rx + radius, ry + rh);
+          ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - radius);
+          ctx.lineTo(rx, ry + radius);
+          ctx.quadraticCurveTo(rx, ry, rx + radius, ry);
+          ctx.closePath();
+          ctx.fill();
+
+          // Dibujamos el logo encima del fondo blanco
+          ctx.drawImage(uploadedLogo, logoX, logoY, logoW, logoH);
+        }
+
+        // Convertimos el canvas a una imagen PNG y forzamos la descarga
+        const link = document.createElement('a');
+        link.download = 'mi-codigo-qr-personalizado.png';
+        link.href = finalCanvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      if (qrCanvas) {
+        drawFinal(qrCanvas, qrCanvas.width);
+      } else {
+        // Fallback: qrcodejs puede renderizar <img> en vez de <canvas>
+        const fallbackImg = new Image();
+        fallbackImg.onload = function() {
+          drawFinal(fallbackImg, 300);
+        };
+        fallbackImg.onerror = function() {
+          alert('No se pudo leer el QR para descargarlo. Intentá generar de nuevo.');
+        };
+        fallbackImg.src = qrImg.src;
+      }
+    }
+
+    // Permitir presionar "Enter" en el input
     document.getElementById('linkInput').addEventListener('keydown', function (event) {
       if (event.key === 'Enter') {
         generateQRCode();
       }
     });
+
+    document.getElementById('generateBtn').addEventListener('click', generateQRCode);
+    document.getElementById('downloadBtn').addEventListener('click', downloadQR);
   </script>
 
 </body>
