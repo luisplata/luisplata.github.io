@@ -461,30 +461,6 @@
           <input type="color" id="bgColor" value="#ffffff">
         </label>
       </div>
-
-      <label class="check-row" for="useShadow">
-        <input type="checkbox" id="useShadow">
-        Sombra
-      </label>
-      <div id="shadowRow" hidden>
-        <div class="row-2">
-          <label for="shadowColor">Color de sombra:
-            <input type="color" id="shadowColor" value="#0a2472">
-          </label>
-          <label for="shadowAngle">Ángulo: <output id="shadowAngleVal" for="shadowAngle">45°</output>
-            <input type="range" id="shadowAngle" min="0" max="360" step="5" value="45">
-          </label>
-        </div>
-        <div class="row-2">
-          <label for="shadowDist">Distancia: <output id="shadowDistVal" for="shadowDist">12px</output>
-            <input type="range" id="shadowDist" min="0" max="40" step="1" value="12">
-          </label>
-          <label for="shadowBlur">Grosor (blur): <output id="shadowBlurVal" for="shadowBlur">16px</output>
-            <input type="range" id="shadowBlur" min="0" max="40" step="1" value="16">
-          </label>
-        </div>
-        <p class="hint">La sombra se ve en pantalla y se hornea en el PNG. En SVG se descarga plano (el vector no guarda sombra raster).</p>
-      </div>
     </fieldset>
 
     <section class="qr-wrap" aria-live="polite">
@@ -528,7 +504,6 @@
       if (showMessage) setLogoStatus('');
       if (qrCode && currentData) {
         qrCode.update({ image: '' });
-        applyShadowPreview();
       }
     }
 
@@ -552,7 +527,6 @@
       refreshLogoOutputs();
       if (qrCode && currentData) {
         qrCode.update({ imageOptions: getImageOptions() });
-        applyShadowPreview();
       }
     }
 
@@ -580,7 +554,6 @@
     function pushLogoToQr() {
       if (qrCode && currentData) {
         qrCode.update({ image: logoDataUrl, imageOptions: getImageOptions() });
-        applyShadowPreview();
       }
     }
 
@@ -640,7 +613,6 @@
       const container = document.getElementById('qrcode');
       container.innerHTML = '';
       qrCode.append(container);
-      applyShadowPreview();
     }
 
     // ---- Estilo y efectos ----
@@ -724,32 +696,8 @@
       };
     }
 
-    function getShadowSettings() {
-      const angle = parseInt(document.getElementById('shadowAngle').value, 10) * Math.PI / 180;
-      const dist = parseInt(document.getElementById('shadowDist').value, 10);
-      return {
-        on: document.getElementById('useShadow').checked,
-        color: document.getElementById('shadowColor').value,
-        blur: parseInt(document.getElementById('shadowBlur').value, 10),
-        offsetX: Math.cos(angle) * dist,
-        offsetY: Math.sin(angle) * dist
-      };
-    }
-
     function refreshStyleOutputs() {
       document.getElementById('gradAngleVal').textContent = document.getElementById('gradAngle').value + '°';
-      document.getElementById('shadowAngleVal').textContent = document.getElementById('shadowAngle').value + '°';
-      document.getElementById('shadowDistVal').textContent = document.getElementById('shadowDist').value + 'px';
-      document.getElementById('shadowBlurVal').textContent = document.getElementById('shadowBlur').value + 'px';
-    }
-
-    function applyShadowPreview() {
-      const canvas = document.querySelector('#qrcode canvas');
-      if (!canvas) return;
-      const sh = getShadowSettings();
-      canvas.style.filter = sh.on
-        ? 'drop-shadow(' + sh.offsetX.toFixed(1) + 'px ' + sh.offsetY.toFixed(1) + 'px ' + sh.blur + 'px ' + sh.color + ')'
-        : '';
     }
 
     function applyStyleOptions() {
@@ -769,7 +717,6 @@
         cornersDotOptions: style.cornersDotOptions,
         backgroundOptions: style.backgroundOptions
       });
-      applyShadowPreview();
     }
 
     // 1. Manejar la carga de la imagen (se guarda como DataURL, la lib la encaja con su aspecto)
@@ -881,56 +828,10 @@
 
     function downloadQR(extension) {
       if (!qrCode || !currentData) return alert('Primero genera un código QR.');
-      const ext = extension || 'png';
-      // La sombra es raster: solo se puede hornear en PNG. En SVG se descarga plano.
-      if (ext === 'png' && getShadowSettings().on) {
-        downloadPngWithShadow();
-        return;
-      }
-      qrCode.download({ name: getFileName(), extension: ext })
+      qrCode.download({ name: getFileName(), extension: extension || 'png' })
         .catch(function() {
           alert('No se pudo descargar el QR. Intentá generar de nuevo.');
         });
-    }
-
-    // Hornea la sombra en el PNG: compone el QR sobre un canvas transparente
-    // con padding, usando la API de sombras del canvas 2D.
-    function downloadPngWithShadow() {
-      const sh = getShadowSettings();
-      qrCode.getRawData('png').then(function(blob) {
-        if (!blob) throw new Error('empty');
-        const url = URL.createObjectURL(blob);
-        const img = new Image();
-        img.onload = function() {
-          try {
-            const pad = Math.ceil(sh.blur + Math.max(Math.abs(sh.offsetX), Math.abs(sh.offsetY)) + 8);
-            const finalCanvas = document.createElement('canvas');
-            finalCanvas.width = QR_SIZE + pad * 2;
-            finalCanvas.height = QR_SIZE + pad * 2;
-            const ctx = finalCanvas.getContext('2d');
-            ctx.shadowColor = sh.color;
-            ctx.shadowBlur = sh.blur;
-            ctx.shadowOffsetX = sh.offsetX;
-            ctx.shadowOffsetY = sh.offsetY;
-            ctx.drawImage(img, pad, pad, QR_SIZE, QR_SIZE);
-            const link = document.createElement('a');
-            link.download = getFileName() + '.png';
-            link.href = finalCanvas.toDataURL('image/png');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          } finally {
-            URL.revokeObjectURL(url);
-          }
-        };
-        img.onerror = function() {
-          URL.revokeObjectURL(url);
-          alert('No se pudo componer la sombra. Intentá generar de nuevo.');
-        };
-        img.src = url;
-      }).catch(function() {
-        alert('No se pudo descargar el QR. Intentá generar de nuevo.');
-      });
     }
 
     // Permitir presionar "Enter" en el input
@@ -964,13 +865,6 @@
     });
     document.getElementById('useGradient').addEventListener('change', function() {
       document.getElementById('gradientRow').hidden = !this.checked;
-      applyStyleOptions();
-    });
-    ['shadowColor', 'shadowAngle', 'shadowDist', 'shadowBlur'].forEach(function(id) {
-      document.getElementById(id).addEventListener('input', applyStyleOptions);
-    });
-    document.getElementById('useShadow').addEventListener('change', function() {
-      document.getElementById('shadowRow').hidden = !this.checked;
       applyStyleOptions();
     });
     refreshLogoOutputs();
