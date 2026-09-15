@@ -241,6 +241,42 @@
       text-decoration: underline;
     }
 
+    .row-2 {
+      display: flex;
+      gap: 0.7rem;
+    }
+
+    .row-2 > label {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .logo-tools select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #bfd3ff;
+      padding: 0.6rem 0.7rem;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .logo-tools input[type="color"] {
+      width: 100%;
+      height: 2.6rem;
+      border: 1px solid #bfd3ff;
+      border-radius: 10px;
+      padding: 0.15rem 0.25rem;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .hint {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0.2rem 0 0.6rem;
+    }
+
     @media (max-width: 560px) {
       .app {
         border-radius: 18px;
@@ -296,6 +332,96 @@
       <button type="button" id="removeLogoBtn" class="link-btn">Quitar logo</button>
     </fieldset>
 
+    <fieldset id="styleTools" class="logo-tools">
+      <legend>Estilo y efectos</legend>
+
+      <div class="row-2">
+        <label for="dotType">Estilo de puntos:
+          <select id="dotType">
+            <option value="rounded" selected>Redondeados</option>
+            <option value="square">Cuadrados</option>
+            <option value="dots">Círculos</option>
+            <option value="classy">Classy</option>
+            <option value="classy-rounded">Classy redondeado</option>
+            <option value="extra-rounded">Extra redondeados</option>
+          </select>
+        </label>
+        <label for="dotColor">Color de puntos:
+          <input type="color" id="dotColor" value="#182230">
+        </label>
+      </div>
+
+      <label class="check-row" for="useGradient">
+        <input type="checkbox" id="useGradient">
+        Degradado en puntos
+      </label>
+      <div id="gradientRow" hidden>
+        <div class="row-2">
+          <label for="dotColor2">Color final:
+            <input type="color" id="dotColor2" value="#155eef">
+          </label>
+          <label for="gradAngle">Ángulo: <output id="gradAngleVal" for="gradAngle">45°</output>
+            <input type="range" id="gradAngle" min="0" max="360" step="5" value="45">
+          </label>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <label for="cornerSqType">Ojos externos:
+          <select id="cornerSqType">
+            <option value="square" selected>Cuadrados</option>
+            <option value="extra-rounded">Redondeados</option>
+            <option value="dot">Circulares</option>
+          </select>
+        </label>
+        <label for="cornerSqColor">Color:
+          <input type="color" id="cornerSqColor" value="#182230">
+        </label>
+      </div>
+
+      <div class="row-2">
+        <label for="cornerDotType">Ojos internos (inline):
+          <select id="cornerDotType">
+            <option value="square" selected>Cuadrados</option>
+            <option value="dot">Circulares</option>
+          </select>
+        </label>
+        <label for="cornerDotColor">Color:
+          <input type="color" id="cornerDotColor" value="#182230">
+        </label>
+      </div>
+
+      <div class="row-2">
+        <label for="bgColor">Color de fondo:
+          <input type="color" id="bgColor" value="#ffffff">
+        </label>
+      </div>
+
+      <label class="check-row" for="useShadow">
+        <input type="checkbox" id="useShadow">
+        Sombra
+      </label>
+      <div id="shadowRow" hidden>
+        <div class="row-2">
+          <label for="shadowColor">Color de sombra:
+            <input type="color" id="shadowColor" value="#0a2472">
+          </label>
+          <label for="shadowAngle">Ángulo: <output id="shadowAngleVal" for="shadowAngle">45°</output>
+            <input type="range" id="shadowAngle" min="0" max="360" step="5" value="45">
+          </label>
+        </div>
+        <div class="row-2">
+          <label for="shadowDist">Distancia: <output id="shadowDistVal" for="shadowDist">12px</output>
+            <input type="range" id="shadowDist" min="0" max="40" step="1" value="12">
+          </label>
+          <label for="shadowBlur">Grosor (blur): <output id="shadowBlurVal" for="shadowBlur">16px</output>
+            <input type="range" id="shadowBlur" min="0" max="40" step="1" value="16">
+          </label>
+        </div>
+        <p class="hint">La sombra se ve en pantalla y se hornea en el PNG. En SVG se descarga plano (el vector no guarda sombra raster).</p>
+      </div>
+    </fieldset>
+
     <section class="qr-wrap" aria-live="polite">
       <p id="placeholder">Aquí aparecerá tu código QR</p>
       
@@ -335,6 +461,7 @@
       if (showMessage) setLogoStatus('');
       if (qrCode && currentData) {
         qrCode.update({ image: '' });
+        applyShadowPreview();
       }
     }
 
@@ -358,10 +485,13 @@
       refreshLogoOutputs();
       if (qrCode && currentData) {
         qrCode.update({ imageOptions: getImageOptions() });
+        applyShadowPreview();
       }
     }
 
     function createQrInstance(data) {
+      const style = getStyleOptions();
+      lastGradientOn = document.getElementById('useGradient').checked;
       qrCode = new QRCodeStyling({
         width: QR_SIZE,
         height: QR_SIZE,
@@ -372,17 +502,98 @@
           errorCorrectionLevel: 'H' // Nivel H: VITAL para que siga legible con logo
         },
         imageOptions: getImageOptions(),
-        dotsOptions: {
-          color: '#182230',
-          type: 'rounded'
-        },
-        backgroundOptions: {
-          color: '#ffffff'
-        }
+        dotsOptions: style.dotsOptions,
+        cornersSquareOptions: style.cornersSquareOptions,
+        cornersDotOptions: style.cornersDotOptions,
+        backgroundOptions: style.backgroundOptions
       });
       const container = document.getElementById('qrcode');
       container.innerHTML = '';
       qrCode.append(container);
+      applyShadowPreview();
+    }
+
+    // ---- Estilo y efectos ----
+    let lastGradientOn = false;
+
+    function getStyleOptions() {
+      const useGrad = document.getElementById('useGradient').checked;
+      const c1 = document.getElementById('dotColor').value;
+      const c2 = document.getElementById('dotColor2').value;
+      return {
+        dotsOptions: {
+          type: document.getElementById('dotType').value,
+          color: c1,
+          roundSize: true,
+          gradient: useGrad ? {
+            type: 'linear',
+            rotation: parseInt(document.getElementById('gradAngle').value, 10) * Math.PI / 180,
+            colorStops: [
+              { offset: 0, color: c1 },
+              { offset: 1, color: c2 }
+            ]
+          } : undefined
+        },
+        cornersSquareOptions: {
+          type: document.getElementById('cornerSqType').value,
+          color: document.getElementById('cornerSqColor').value
+        },
+        cornersDotOptions: {
+          type: document.getElementById('cornerDotType').value,
+          color: document.getElementById('cornerDotColor').value
+        },
+        backgroundOptions: {
+          color: document.getElementById('bgColor').value
+        }
+      };
+    }
+
+    function getShadowSettings() {
+      const angle = parseInt(document.getElementById('shadowAngle').value, 10) * Math.PI / 180;
+      const dist = parseInt(document.getElementById('shadowDist').value, 10);
+      return {
+        on: document.getElementById('useShadow').checked,
+        color: document.getElementById('shadowColor').value,
+        blur: parseInt(document.getElementById('shadowBlur').value, 10),
+        offsetX: Math.cos(angle) * dist,
+        offsetY: Math.sin(angle) * dist
+      };
+    }
+
+    function refreshStyleOutputs() {
+      document.getElementById('gradAngleVal').textContent = document.getElementById('gradAngle').value + '°';
+      document.getElementById('shadowAngleVal').textContent = document.getElementById('shadowAngle').value + '°';
+      document.getElementById('shadowDistVal').textContent = document.getElementById('shadowDist').value + 'px';
+      document.getElementById('shadowBlurVal').textContent = document.getElementById('shadowBlur').value + 'px';
+    }
+
+    function applyShadowPreview() {
+      const canvas = document.querySelector('#qrcode canvas');
+      if (!canvas) return;
+      const sh = getShadowSettings();
+      canvas.style.filter = sh.on
+        ? 'drop-shadow(' + sh.offsetX.toFixed(1) + 'px ' + sh.offsetY.toFixed(1) + 'px ' + sh.blur + 'px ' + sh.color + ')'
+        : '';
+    }
+
+    function applyStyleOptions() {
+      refreshStyleOutputs();
+      if (!qrCode || !currentData) return;
+      // El merge interno de update() no limpia un degradado ya aplicado:
+      // si el toggle cambió, recreamos la instancia para un estado determinístico.
+      const gradOn = document.getElementById('useGradient').checked;
+      if (gradOn !== lastGradientOn) {
+        createQrInstance(currentData);
+        return;
+      }
+      const style = getStyleOptions();
+      qrCode.update({
+        dotsOptions: style.dotsOptions,
+        cornersSquareOptions: style.cornersSquareOptions,
+        cornersDotOptions: style.cornersDotOptions,
+        backgroundOptions: style.backgroundOptions
+      });
+      applyShadowPreview();
     }
 
     // 1. Manejar la carga de la imagen (se guarda como DataURL, la lib la encaja con su aspecto)
@@ -416,6 +627,7 @@
           refreshLogoOutputs();
           if (qrCode && currentData) {
             qrCode.update({ image: logoDataUrl, imageOptions: getImageOptions() });
+            applyShadowPreview();
           }
         };
         img.onerror = function() {
@@ -496,10 +708,56 @@
 
     function downloadQR(extension) {
       if (!qrCode || !currentData) return alert('Primero genera un código QR.');
-      qrCode.download({ name: getFileName(), extension: extension || 'png' })
+      const ext = extension || 'png';
+      // La sombra es raster: solo se puede hornear en PNG. En SVG se descarga plano.
+      if (ext === 'png' && getShadowSettings().on) {
+        downloadPngWithShadow();
+        return;
+      }
+      qrCode.download({ name: getFileName(), extension: ext })
         .catch(function() {
           alert('No se pudo descargar el QR. Intentá generar de nuevo.');
         });
+    }
+
+    // Hornea la sombra en el PNG: compone el QR sobre un canvas transparente
+    // con padding, usando la API de sombras del canvas 2D.
+    function downloadPngWithShadow() {
+      const sh = getShadowSettings();
+      qrCode.getRawData('png').then(function(blob) {
+        if (!blob) throw new Error('empty');
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = function() {
+          try {
+            const pad = Math.ceil(sh.blur + Math.max(Math.abs(sh.offsetX), Math.abs(sh.offsetY)) + 8);
+            const finalCanvas = document.createElement('canvas');
+            finalCanvas.width = QR_SIZE + pad * 2;
+            finalCanvas.height = QR_SIZE + pad * 2;
+            const ctx = finalCanvas.getContext('2d');
+            ctx.shadowColor = sh.color;
+            ctx.shadowBlur = sh.blur;
+            ctx.shadowOffsetX = sh.offsetX;
+            ctx.shadowOffsetY = sh.offsetY;
+            ctx.drawImage(img, pad, pad, QR_SIZE, QR_SIZE);
+            const link = document.createElement('a');
+            link.download = getFileName() + '.png';
+            link.href = finalCanvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } finally {
+            URL.revokeObjectURL(url);
+          }
+        };
+        img.onerror = function() {
+          URL.revokeObjectURL(url);
+          alert('No se pudo componer la sombra. Intentá generar de nuevo.');
+        };
+        img.src = url;
+      }).catch(function() {
+        alert('No se pudo descargar el QR. Intentá generar de nuevo.');
+      });
     }
 
     // Permitir presionar "Enter" en el input
@@ -519,7 +777,24 @@
       clearLogo(true);
       setLogoStatus('Logo quitado. Podés subir otro si querés.');
     });
+    // Controles de estilo y efectos (aplican en vivo si ya hay QR)
+    ['dotType', 'dotColor', 'dotColor2', 'gradAngle', 'cornerSqType', 'cornerSqColor',
+     'cornerDotType', 'cornerDotColor', 'bgColor'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', applyStyleOptions);
+    });
+    document.getElementById('useGradient').addEventListener('change', function() {
+      document.getElementById('gradientRow').hidden = !this.checked;
+      applyStyleOptions();
+    });
+    ['shadowColor', 'shadowAngle', 'shadowDist', 'shadowBlur'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', applyStyleOptions);
+    });
+    document.getElementById('useShadow').addEventListener('change', function() {
+      document.getElementById('shadowRow').hidden = !this.checked;
+      applyStyleOptions();
+    });
     refreshLogoOutputs();
+    refreshStyleOutputs();
   </script>
 
 </body>
