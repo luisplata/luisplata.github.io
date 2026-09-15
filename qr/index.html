@@ -277,6 +277,43 @@
       margin: 0.2rem 0 0.6rem;
     }
 
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.55rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .swatch {
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 0;
+      cursor: pointer;
+      background: none;
+      display: grid;
+      gap: 0.25rem;
+      justify-items: center;
+    }
+
+    .swatch span {
+      width: 100%;
+      height: 2.2rem;
+      border-radius: 10px;
+      border: 1px solid #bfd3ff;
+      display: block;
+    }
+
+    .swatch small {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .swatch[aria-pressed="true"] span {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(21, 94, 239, 0.35);
+    }
+
     @media (max-width: 560px) {
       .app {
         border-radius: 18px;
@@ -334,6 +371,11 @@
 
     <fieldset id="styleTools" class="logo-tools">
       <legend>Estilo y efectos</legend>
+
+      <label>Paletas Materialize:
+        <span class="hint">Un clic aplica puntos + ojos + fondo. Después podés ajustar fino abajo.</span>
+      </label>
+      <div class="palette-grid" id="paletteGrid" role="group" aria-label="Paletas de color Materialize"></div>
 
       <div class="row-2">
         <label for="dotType">Estilo de puntos:
@@ -515,6 +557,52 @@
 
     // ---- Estilo y efectos ----
     let lastGradientOn = false;
+
+    // Hex oficiales de Materialize (sass/components/_color-variables.scss):
+    // puntos en darken-4 sobre fondo lighten-5 para mantener contraste de lectura.
+    const MATERIAL_PRESETS = [
+      { name: 'Clásico',   dots: '#212121', bg: '#FFFFFF' },
+      { name: 'Océano',    dots: '#0D47A1', bg: '#E3F2FD' },
+      { name: 'Esmeralda', dots: '#004D40', bg: '#E0F2F1' },
+      { name: 'Violeta',   dots: '#311B92', bg: '#EDE7F6' },
+      { name: 'Atardecer', dots: '#BF360C', bg: '#FFF3E0' },
+      { name: 'Carbón',    dots: '#263238', bg: '#ECEFF1' },
+      { name: 'Rosa',      dots: '#880E4F', bg: '#FCE4EC' },
+      { name: 'Bosque',    dots: '#1B5E20', bg: '#E8F5E9' }
+    ];
+
+    function renderPaletteGrid() {
+      const grid = document.getElementById('paletteGrid');
+      MATERIAL_PRESETS.forEach(function(p) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'swatch';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', 'Paleta ' + p.name);
+        btn.title = p.name + ' (' + p.dots + ' / ' + p.bg + ')';
+        const chip = document.createElement('span');
+        chip.style.background = 'linear-gradient(135deg, ' + p.dots + ' 50%, ' + p.bg + ' 50%)';
+        const caption = document.createElement('small');
+        caption.textContent = p.name;
+        btn.appendChild(chip);
+        btn.appendChild(caption);
+        btn.addEventListener('click', function() {
+          applyPalette(p, btn);
+        });
+        grid.appendChild(btn);
+      });
+    }
+
+    function applyPalette(p, btn) {
+      document.getElementById('dotColor').value = p.dots;
+      document.getElementById('cornerSqColor').value = p.dots;
+      document.getElementById('cornerDotColor').value = p.dots;
+      document.getElementById('bgColor').value = p.bg;
+      document.querySelectorAll('#paletteGrid .swatch').forEach(function(s) {
+        s.setAttribute('aria-pressed', s === btn ? 'true' : 'false');
+      });
+      applyStyleOptions();
+    }
 
     function getStyleOptions() {
       const useGrad = document.getElementById('useGradient').checked;
@@ -795,6 +883,7 @@
     });
     refreshLogoOutputs();
     refreshStyleOutputs();
+    renderPaletteGrid();
   </script>
 
 </body>
